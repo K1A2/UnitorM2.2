@@ -44,7 +44,7 @@ public class SplashActivity extends AppCompatActivity {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                                        ActivityCompat.requestPermissions(SplashActivity.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1000);
+                                        ActivityCompat.requestPermissions(SplashActivity.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, 100);
                                     }
                                 }
                             })
@@ -52,7 +52,7 @@ public class SplashActivity extends AppCompatActivity {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     Toast.makeText(SplashActivity.this, getString(R.string.unable_save), Toast.LENGTH_SHORT).show();
-                                    startMain();
+                                    finish();
                                 }
                             })
                             .create()
@@ -71,12 +71,11 @@ public class SplashActivity extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
         switch (requestCode) {
             case 100:
-
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     startMain();
                 } else {
                     Toast.makeText(SplashActivity.this, R.string.unable_save, Toast.LENGTH_SHORT).show();//
-                    startMain();
+                    finish();
                 }
                 return;
         }
