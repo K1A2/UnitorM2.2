@@ -5,4 +5,6 @@
     <color name="colorAccent">#FF4081</color>
     <color name="colorAccentDark">#ae2c58</color>
     <color name="black_semi_transparent">#1a1919</color>
+    <color name="title">#c8ffffff</color>
+    <color name="sub">#98ffffff</color>
 </resources>
