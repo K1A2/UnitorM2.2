@@ -22,7 +22,6 @@ public class UnipackListAdapter extends BaseAdapter {
     private String producer;
     private String path;
     private String chain;
-    private String land;
 
     public UnipackListAdapter () {
 
@@ -47,7 +46,6 @@ public class UnipackListAdapter extends BaseAdapter {
         TextView produceView = (TextView)convertView.findViewById(R.id.list_unipack_producer);
         TextView pathView= (TextView)convertView.findViewById(R.id.list_unipack_path);
         TextView chainView = (TextView)convertView.findViewById(R.id.list_unipack_chain);
-        TextView landView = (TextView)convertView.findViewById(R.id.list_unipack_land);
 
         UnipackListItem listItem = listViewList.get(pos);
 
@@ -55,13 +53,11 @@ public class UnipackListAdapter extends BaseAdapter {
         producer = listItem.getProducer();
         path = listItem.getPath();
         chain = listItem.getChain();
-        land = listItem.getLand();
 
         titleView.setText(title);
         produceView.setText(producer);
         pathView.setText(path);
         chainView.setText(chain);
-        landView.setText(land);
 
         return convertView;
     }
@@ -76,14 +72,13 @@ public class UnipackListAdapter extends BaseAdapter {
         return listViewList.get(position);
     }
 
-    public void addItem (String title, String producer, String path, String chain, String land) {
+    public void addItem (String title, String producer, String path, String chain) {
         UnipackListItem listItem = new UnipackListItem();
 
         listItem.setTitle(title);
         listItem.setProducer(producer);
         listItem.setPath(path);
         listItem.setChain(chain);
-        listItem.setLand(land);
 
         listViewList.add(listItem);
     }

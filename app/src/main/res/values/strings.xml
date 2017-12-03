@@ -9,4 +9,15 @@
     <string name="setting">Setting</string>
     <string name="importing">Import</string>
     <string name="newPack">New Pack</string>
+    <string name="alert_err">Error</string>
+    <string name="alert_ok">ok</string>
+    <string name="asynk_delete_title">Deleting \n%s\n...</string>
+    <string name="alert_message_dunipack">Are you sure delete \'%s\'?</string>
+    <string name="alert_title_dunipack">Delete \'%s\'</string>
+    <string name="alert_button_dok">delete</string>
+    <string name="alert_button_dcancel">cancel</string>
+    <string name="pref_category_app">App Setting</string>
+    <string name="pref_app_lockon">Turn on display while editing</string>
+    <string name="pref_app_lockonOk">Enable</string>
+    <string name="pref_app_lockonNo">Disable</string>
 </resources>

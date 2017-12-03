@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">UnitorM2</string>
+    <string name="app_ver">3.2.0</string>
+    <string name="per_re_title">권한 요청</string>
+    <string name="per_re_content">유니팩을 저장하기위해 \'저장소 쓰기 (EXTERNAL_WRITE)\' 권한이 필요합니다. 거부할경우, 저장이 불가능 합니다.</string>
+    <string name="agree">동의</string>
+    <string name="cancel">취소</string>
+    <string name="unable_save">유니팩을 저장할수 없을것입니다.</string>
+    <string name="setting">설정</string>
+    <string name="importing">불러오기</string>
+    <string name="newPack">새로하기</string>
+    <string name="alert_err">에러</string>
+    <string name="alert_ok">확인</string>
+    <string name="asynk_delete_title">\'%s\' 삭제중...</string>
+    <string name="alert_message_dunipack">\'%s\'를 삭제하시겠습니까?</string>
+    <string name="alert_title_dunipack">\'%s\' 삭제</string>
+    <string name="alert_button_dok">삭제</string>
+    <string name="alert_button_dcancel">취소</string>
+    <string name="pref_category_app">앱 설</string>
+    <string name="pref_app_lockon">편집화면 켜진 채로 유지</string>
+    <string name="pref_app_lockonOk">활성화</string>
+    <string name="pref_app_lockonNo">비활성화</string>
+</resources>

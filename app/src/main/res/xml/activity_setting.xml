@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory android:title="@string/pref_category_app">
+        <SwitchPreference
+            android:title="@string/pref_app_lockon"
+            android:key="setting_screen"
+            android:defaultValue="false"
+            android:summaryOn="@string/pref_app_lockonOk"
+            android:summaryOff="@string/pref_app_lockonNo"/>
+    </PreferenceCategory>
+</PreferenceScreen>

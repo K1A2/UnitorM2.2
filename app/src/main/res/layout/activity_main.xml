@@ -7,7 +7,9 @@
     <ListView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/List_Unipack"></ListView>
+        android:id="@+id/List_Unipack"
+        android:dividerHeight="5dp"
+        android:divider="#00ffffff"></ListView>
 
     <com.getbase.floatingactionbutton.FloatingActionsMenu
         android:layout_width="wrap_content"

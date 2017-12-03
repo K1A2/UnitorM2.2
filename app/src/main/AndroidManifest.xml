@@ -13,7 +13,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".activitys.SplashActivity"
-            android:screenOrientation="sensorLandscape">
+            android:screenOrientation="sensorLandscape"
+            android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -21,7 +22,14 @@
             </intent-filter>
         </activity>
         <activity android:name=".activitys.MainActivity"
-            android:screenOrientation="sensorLandscape"/>
+            android:screenOrientation="sensorLandscape"
+            android:launchMode="singleTask"/>
+        <activity android:name=".activitys.SharedPreference.SettingActivity"
+            android:screenOrientation="sensorLandscape"
+            android:launchMode="singleTask"/>
+        <activity android:name=".activitys.TabHostActivity"
+            android:screenOrientation="sensorLandscape"
+            android:launchMode="singleTask"/>
     </application>
 
 </manifest>

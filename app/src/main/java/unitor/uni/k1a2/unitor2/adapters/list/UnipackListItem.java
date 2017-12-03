@@ -10,7 +10,6 @@ public class UnipackListItem {
     private String producerStr;
     private String pathStr;
     private String chainStr;
-    private String landStr;
 
     public void setTitle(String title) {
         titleStr = title;
@@ -28,10 +27,6 @@ public class UnipackListItem {
         chainStr = chain;
     }
 
-    public void setLand(String land) {
-        landStr = land;
-    }
-
     public String getTitle() {
         return this.titleStr;
     }
@@ -46,9 +41,5 @@ public class UnipackListItem {
 
     public String getChain() {
         return this.chainStr;
-    }
-
-    public String getLand() {
-        return this.landStr;
     }
 }
