@@ -7,4 +7,5 @@
     <color name="black_semi_transparent">#1a1919</color>
     <color name="title">#c8ffffff</color>
     <color name="sub">#98ffffff</color>
+    <color name="dialogButton">#00ffffff</color>
 </resources>

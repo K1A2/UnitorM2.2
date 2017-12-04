@@ -20,4 +20,9 @@
     <string name="pref_app_lockon">Turn on display while editing</string>
     <string name="pref_app_lockonOk">Enable</string>
     <string name="pref_app_lockonNo">Disable</string>
+    <string name="toast_back">If you want to go back, press \'Back button\' one more.</string>
+    <string name="dialog_Make">make</string>
+    <string name="dialog_title_newUnipack">Making new Unipack</string>
+    <string name="toast_newUnipack_null">Please fill in all blanks</string>
+    <string name="button_selectAll">Select All</string>
 </resources>

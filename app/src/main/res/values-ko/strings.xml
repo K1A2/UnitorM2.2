@@ -20,4 +20,9 @@
     <string name="pref_app_lockon">편집화면 켜진 채로 유지</string>
     <string name="pref_app_lockonOk">활성화</string>
     <string name="pref_app_lockonNo">비활성화</string>
+    <string name="toast_back">종료하고 싶다면 뒤로 가기 버튼을 한 번 더 누르세요.</string>
+    <string name="dialog_Make">만들기</string>
+    <string name="dialog_title_newUnipack">새로운 유니팩 생성하기</string>
+    <string name="toast_newUnipack_null">모든 빈칸을 입력해주세요</string>
+    <string name="button_selectAll">전체 선택</string>
 </resources>
