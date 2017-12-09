@@ -12,6 +12,7 @@ public interface FileKey {
     String KEY_INFO_TITLE = "title=";
     String KEY_INFO_PRODUCER = "producerName=";
     String KEY_INFO_CHAIN = "chain=";
+    String KEY_INFO_CONTENT = "title=%s\nproducerName=%s\nbuttonX=8\nbuttonY=8\nchain=%s\nsquareButton=true\nlandscape=true";
 
     String KEY_DELETE_UNIPACK = "deleteUnipack";
 }

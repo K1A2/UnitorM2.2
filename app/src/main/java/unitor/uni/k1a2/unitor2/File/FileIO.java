@@ -9,6 +9,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.FileReader;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 
 import unitor.uni.k1a2.unitor2.R;
@@ -108,6 +109,28 @@ public class FileIO extends ContextWrapper {
         } else {
             return null;
         }
+    }
+
+    public ArrayList<String> getInfo(String path) throws Exception {
+        path += "info";
+        return getTextFile(new File(path));
+    }
+
+    public void mkNewUnipack(String Title, String Producer, String Chain, String path) throws Exception {
+        File file = new File(path);
+        isExists(file, FileKey.KEY_DIRECTORY_INT);
+
+        path += "info";
+        mkInfo(Title, Producer, Chain, path);
+    }
+
+    public void mkInfo(String Title, String Producer, String Chain, String path) throws Exception {
+        File file = new File(path);
+        isExists(file, FileKey.KEY_FILE_INT);
+
+        PrintWriter printWriter = new PrintWriter(file);
+        printWriter.printf(FileKey.KEY_INFO_CONTENT, Title, Producer, Chain);
+        printWriter.close();
     }
 
     //파일 유무, 없으면 생성

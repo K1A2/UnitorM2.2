@@ -18,23 +18,24 @@ import com.getbase.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 
-import unitor.uni.k1a2.unitor2.File.DeleteFile;
+import unitor.uni.k1a2.unitor2.File.AsyncTask.DeleteFile;
+import unitor.uni.k1a2.unitor2.File.AsyncTask.UnzipFile;
 import unitor.uni.k1a2.unitor2.File.FileIO;
 import unitor.uni.k1a2.unitor2.File.FileKey;
 import unitor.uni.k1a2.unitor2.File.SharedPreference.PreferenceKey;
 import unitor.uni.k1a2.unitor2.File.SharedPreference.SharedPreferenceIO;
 import unitor.uni.k1a2.unitor2.R;
 import unitor.uni.k1a2.unitor2.activitys.SharedPreference.SettingActivity;
-import unitor.uni.k1a2.unitor2.adapters.list.UnipackListAdapter;
-import unitor.uni.k1a2.unitor2.adapters.list.UnipackListItem;
 import unitor.uni.k1a2.unitor2.views.Dialogs.DialogKey;
 import unitor.uni.k1a2.unitor2.views.Dialogs.MultiDialog;
+import unitor.uni.k1a2.unitor2.views.adapters.list.UnipackListAdapter;
+import unitor.uni.k1a2.unitor2.views.adapters.list.UnipackListItem;
 
 /**
  * Created by jckim on 2017-11-29.
  */
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements MultiDialog.OnUnipackSelectListener {
 
     private ListView list_unipack = null;
     private FloatingActionButton fab_new = null;
@@ -42,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
     private FloatingActionButton fab_setting = null;
 
     private FileIO fileIO = null;
+    private MultiDialog multiDialog;
     private UnipackListItem unipackListItem = null;
     private UnipackListAdapter unipackListAdapter = null;
     private SharedPreferenceIO sharedPreferenceIO = null;
@@ -69,6 +71,11 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 unipackListItem = (UnipackListItem)unipackListAdapter.getItem(i);
+                final String string_title = unipackListItem.getTitle();
+                final String string_producer = unipackListItem.getProducer();
+                final String string_chain = unipackListItem.getChain();
+                final String string_Path = unipackListItem.getPath();
+                startEdit(string_title, string_producer, string_chain, string_Path);
             }
         });
 
@@ -112,16 +119,18 @@ public class MainActivity extends AppCompatActivity {
                                 final String string_title = edit_title.getText().toString();
                                 final String string_producer = edit_producer.getText().toString();
                                 final String string_chain = edit_chain.getText().toString();
+                                final String string_path = fileIO.getDefaultPath() + string_title + "/";
 
                                 if ((string_title.length() == 0||string_title.equals(""))||(string_producer.length() == 0||string_producer.equals(""))||(string_chain.length() == 0||string_chain.equals(""))) {
                                     Toast.makeText(MainActivity.this, getString(R.string.toast_newUnipack_null), Toast.LENGTH_LONG).show();
                                 } else {
-                                    sharedPreferenceIO = new SharedPreferenceIO(MainActivity.this, PreferenceKey.KEY_REPOSITORY_INFO);
-                                    sharedPreferenceIO.setString(PreferenceKey.KEY_INFO_TITLE, string_title);
-                                    sharedPreferenceIO.setString(PreferenceKey.KEY_INFO_PRODUCER, string_producer);
-                                    sharedPreferenceIO.setString(PreferenceKey.KEY_INFO_CHAIN, string_chain);
-                                    startActivity(new Intent(MainActivity.this, TabHostActivity.class));
-                                    finish();
+                                    try {
+                                        fileIO.mkNewUnipack(string_title, string_producer, string_chain, string_path);
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                        fileIO.showErr(e.getMessage());
+                                    }
+                                    startEdit(string_title, string_producer, string_chain, string_path);
                                 }
                             }
                         });
@@ -132,7 +141,7 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.fab_import:
                         Bundle args = new Bundle();
                         args.putInt(DialogKey.KEY_BUNDLE_TYPE, DialogKey.KEY_BUNDLE_TYPE_UNIPACK);
-                        MultiDialog multiDialog = new MultiDialog();
+                        multiDialog = new MultiDialog();
                         multiDialog.setArguments(args);
                         multiDialog.show(getSupportFragmentManager(), DialogKey.KEY_MAIN_FILE);
                         break;
@@ -156,6 +165,16 @@ public class MainActivity extends AppCompatActivity {
         showUnipacks();
     }
 
+    private void startEdit(String string_title, String string_producer, String string_chain, String string_path) {
+        sharedPreferenceIO = new SharedPreferenceIO(MainActivity.this, PreferenceKey.KEY_REPOSITORY_INFO);
+        sharedPreferenceIO.setString(PreferenceKey.KEY_INFO_TITLE, string_title);
+        sharedPreferenceIO.setString(PreferenceKey.KEY_INFO_PRODUCER, string_producer);
+        sharedPreferenceIO.setString(PreferenceKey.KEY_INFO_CHAIN, string_chain);
+        sharedPreferenceIO.setString(PreferenceKey.KEY_INFO_PATH, string_path);
+        startActivity(new Intent(MainActivity.this, TabHostActivity.class));
+        finish();
+    }
+
     private void showUnipacks() {
         unipackListAdapter.clear();
         ArrayList<String[]> arrayUnipack = fileIO.getUnipacks();
@@ -165,5 +184,14 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         list_unipack.setAdapter(unipackListAdapter);
+    }
+
+    @Override
+    public void onUnipackSelect(String name, String path) {
+        if (multiDialog != null) {
+            multiDialog.dismiss();
+            UnzipFile unzipFile = new UnzipFile(this);
+            unzipFile.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, name, path, fileIO.getDefaultPath() + "unipackProject/" + name +"/", list_unipack, unipackListAdapter);
+        }
     }
 }

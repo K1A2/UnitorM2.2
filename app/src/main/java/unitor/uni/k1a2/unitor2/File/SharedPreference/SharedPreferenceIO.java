@@ -2,6 +2,7 @@ package unitor.uni.k1a2.unitor2.File.SharedPreference;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 
 /**
  * Created by jckim on 2017-12-03.
@@ -12,6 +13,12 @@ public class SharedPreferenceIO {
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
     private Context context;
+
+    public SharedPreferenceIO(Context context) {
+        this.context = context;
+        this.sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        this.editor = sharedPreferences.edit();
+    }
 
     public SharedPreferenceIO(Context context, String repository) {
         this.context = context;

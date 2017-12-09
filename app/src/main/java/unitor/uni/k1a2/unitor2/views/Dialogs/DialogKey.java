@@ -9,4 +9,5 @@ public interface DialogKey {
 
     String KEY_BUNDLE_TYPE = "Type";
     int KEY_BUNDLE_TYPE_UNIPACK = 0;
+    int KEY_BUNDEL_TYPE_FILES = 1;
 }

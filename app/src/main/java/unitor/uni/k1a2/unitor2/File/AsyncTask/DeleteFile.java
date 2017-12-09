@@ -1,4 +1,4 @@
-package unitor.uni.k1a2.unitor2.File;
+package unitor.uni.k1a2.unitor2.File.AsyncTask;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -8,7 +8,9 @@ import android.widget.ListView;
 import java.io.File;
 import java.util.ArrayList;
 
-import unitor.uni.k1a2.unitor2.adapters.list.UnipackListAdapter;
+import unitor.uni.k1a2.unitor2.File.FileIO;
+import unitor.uni.k1a2.unitor2.File.FileKey;
+import unitor.uni.k1a2.unitor2.views.adapters.list.UnipackListAdapter;
 
 /**
  * Created by jckim on 2017-12-03.
@@ -31,7 +33,6 @@ public class DeleteFile extends AsyncTask<Object, String, String> {
         progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         progressDialog.setCanceledOnTouchOutside(false);
         progressDialog.setCancelable(false);
-        progressDialog.show();
     }
 
     @Override
@@ -54,6 +55,7 @@ public class DeleteFile extends AsyncTask<Object, String, String> {
     protected void onProgressUpdate(String... values) {
         if (values[0].equals(FileKey.KEY_DELETE_UNIPACK)) {
             progressDialog.setTitle(values[1]);
+            progressDialog.show();
         }
     }
 

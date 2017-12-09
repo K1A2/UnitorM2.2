@@ -1,4 +1,4 @@
-package unitor.uni.k1a2.unitor2.adapters.list;
+package unitor.uni.k1a2.unitor2.views.adapters.list;
 
 import android.content.Context;
 import android.view.LayoutInflater;

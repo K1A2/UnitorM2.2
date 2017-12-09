@@ -1,4 +1,4 @@
-package unitor.uni.k1a2.unitor2.adapters.list;
+package unitor.uni.k1a2.unitor2.views.adapters.list;
 
 /**
  * Created by jckim on 2017-12-02.

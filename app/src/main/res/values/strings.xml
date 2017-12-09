@@ -25,4 +25,15 @@
     <string name="dialog_title_newUnipack">Making new Unipack</string>
     <string name="toast_newUnipack_null">Please fill in all blanks</string>
     <string name="button_selectAll">Select All</string>
+    <string name="dialog_title_unipack">Please select a Unipack. (.zip)</string>
+    <string name="dialog_title_file">Please select sounds. (.mp3 or .wav)</string>
+    <string name="async_unzip_title">Unzipping...</string>
+    <string name="async_unzip_message">Unzipping \'%s\'...</string>
+    <string name="dialog_unzip_sucT">Unzip \'%s\' Succeed</string>
+    <string name="dialog_unzip_sucM">Unzip \'%s\' was successful.</string>
+    <string name="dialog_unzip_failT">Unzip \'%s\' Failed</string>
+    <string name="dialog_unzip_failM">Unzip \'%s\' was Failed.</string>
+    <string name="fragment_button_save">Save</string>
+    <string name="toast_save_succeed">Save Succeed</string>
+    <string name="toast_save_fail">Save Failed</string>
 </resources>
