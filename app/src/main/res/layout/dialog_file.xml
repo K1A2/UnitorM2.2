@@ -11,6 +11,13 @@
         android:id="@+id/Text_title"
         android:layout_marginBottom="3dp"/>
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="3dp"
+        android:text="@string/text_file_longClick"
+        android:id="@+id/text_dial_sound"/>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -39,5 +46,21 @@
         android:id="@+id/List_files"
         android:layout_weight="1"
         android:layout_marginBottom="3dp"></ListView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="right">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/button_file_select"
+            android:id="@+id/Button_dial_add"
+            android:background="#00000000"
+            android:textColor="@color/colorPrimary"/>
+
+    </LinearLayout>
 
 </LinearLayout>

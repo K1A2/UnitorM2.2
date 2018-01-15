@@ -36,4 +36,11 @@
     <string name="fragment_button_save">저장</string>
     <string name="toast_save_succeed">저장 성공</string>
     <string name="toast_save_fail">저장 실패</string>
+    <string name="text_add_sound">사운드 불러오기</string>
+    <string name="radio_mode_add">편집모드</string>
+    <string name="radio_mode_test">테스트모드</string>
+    <string name="button_file_select">추가하기</string>
+    <string name="text_file_longClick">길게 누르면 소리가 재생됩니다</string>
+    <string name="async_copy_sound_title">사운드 파일 복사중..</string>
+    <string name="async_copy_sound_finish">사운드를 모두 가져왔습니다</string>
 </resources>

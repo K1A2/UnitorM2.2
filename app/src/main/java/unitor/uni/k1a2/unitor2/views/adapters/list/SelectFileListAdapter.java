@@ -12,21 +12,22 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import unitor.uni.k1a2.unitor2.R;
+import unitor.uni.k1a2.unitor2.views.Dialogs.DialogKey;
 
 /**
  * Created by jckim on 2017-12-02.
  */
 
-public class SelectUnipackListAdapter extends BaseAdapter {
+public class SelectFileListAdapter extends BaseAdapter {
 
-    private ArrayList<SelectUnipackListItem> listViewList = new ArrayList<SelectUnipackListItem>();
+    private ArrayList<SelectFileListItem> listViewList = new ArrayList<SelectFileListItem>();
 
     private int type;
     private Drawable icon;
     private String title;
     private String path;
 
-    public SelectUnipackListAdapter(int Type) {
+    public SelectFileListAdapter(int Type) {
         this.type = Type;
     }
 
@@ -41,15 +42,20 @@ public class SelectUnipackListAdapter extends BaseAdapter {
         final Context context = parent.getContext();
 
         if (convertView == null) {
-            LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(R.layout.view_list_select_u, parent, false);
+            if (type == DialogKey.KEY_BUNDLE_TYPE_UNIPACK) {
+                LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                convertView = inflater.inflate(R.layout.view_list_select_u, parent, false);
+            } else if (type == DialogKey.KEY_BUNDEL_TYPE_FILES) {
+                LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                convertView = inflater.inflate(R.layout.view_list_select_f, parent, false);
+            }
         }
 
         TextView titleView = (TextView)convertView.findViewById(R.id.FragDial_file_name_select);
         TextView pathView= (TextView)convertView.findViewById(R.id.FragDial_file_path_select);
         ImageView iconView = (ImageView)convertView.findViewById(R.id.FragDial_file_Image_select);
 
-        SelectUnipackListItem listItem = listViewList.get(pos);
+        SelectFileListItem listItem = listViewList.get(pos);
 
         title = listItem.getTitle();
         path = listItem.getPath();
@@ -73,7 +79,7 @@ public class SelectUnipackListAdapter extends BaseAdapter {
     }
 
     public void addItem (String title, String path, Drawable icon) {
-        SelectUnipackListItem listItem = new SelectUnipackListItem();
+        SelectFileListItem listItem = new SelectFileListItem();
 
         listItem.setTitle(title);
         listItem.setPath(path);

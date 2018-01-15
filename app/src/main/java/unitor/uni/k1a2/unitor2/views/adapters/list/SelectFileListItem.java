@@ -6,7 +6,7 @@ import android.graphics.drawable.Drawable;
  * Created by jckim on 2017-12-05.
  */
 
-public class SelectUnipackListItem {
+public class SelectFileListItem {
 
     private Drawable iconDrw;
     private String titleStr;

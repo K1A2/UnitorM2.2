@@ -3,6 +3,7 @@ package unitor.uni.k1a2.unitor2.activitys;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.PowerManager;
 import android.support.v4.app.Fragment;
@@ -12,15 +13,20 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.WindowManager;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+
+import unitor.uni.k1a2.unitor2.File.AsyncTask.CopyFile;
+import unitor.uni.k1a2.unitor2.File.FileKey;
 import unitor.uni.k1a2.unitor2.File.SharedPreference.PreferenceKey;
 import unitor.uni.k1a2.unitor2.File.SharedPreference.SharedPreferenceIO;
 import unitor.uni.k1a2.unitor2.R;
+import unitor.uni.k1a2.unitor2.views.Dialogs.MultiDialog;
 
 /**
  * Created by jckim on 2017-12-03.
  */
 
-public class TabHostActivity extends AppCompatActivity {
+public class TabHostActivity extends AppCompatActivity implements MultiDialog.OnFileSelectListener {
 
     private long backKeyPress;
     private SharedPreferenceIO sharedPKill;
@@ -109,6 +115,12 @@ public class TabHostActivity extends AppCompatActivity {
             wakeLock = powerManager.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, "ScreenWake");
             wakeLock.acquire();
         }
+    }
+
+    //사운드파일
+    @Override
+    public void onFileSelect(ArrayList<String[]> files) {
+        new CopyFile().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, FileKey.KEY_COPY_SOUND, files, this, (KeySoundFragment) getSupportFragmentManager().findFragmentByTag("KeySound"));
     }
 
     //탭클릭리스너
