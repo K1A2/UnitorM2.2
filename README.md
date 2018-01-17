@@ -20,6 +20,10 @@
 <strong>제보 위치 : 디스코드</strong><br>
 <strong>관련 부분 : KeyLED Delay</strong><br>
 <strong>내용 : 딜레이 숫자가 바뀐다. 뒤에 다른 명령어가 생긴다. 딜레이 인데 o 11 1 a 같은 led 명령어들이 나온다.</strong><br><br><br>
+<strong>닉네임 : CHIDI</strong><br>
+<strong>제보 위치 : 디스코드</strong><br>
+<strong>관련 부분 : 앱 테마</strong><br>
+<strong>내용 : 앱 light 태마에서 흰 led가 잘 안보인다. (ITX의 한마디.. : 다크만 지원하시는게 어떠신지..)</strong><br><br><br>
 <strong>닉네임 :</strong><br>
 <strong>제보 위치 : </strong><br>
 <strong>관련 부분 : </strong><br>
