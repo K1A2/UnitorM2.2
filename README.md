@@ -1,6 +1,5 @@
 # UnitorM2.2 오류 제보
 <br>
-<br>
 <strong>닉네임 : 전제홍</strong><br>
 <strong>제보 위치 : 카카오톡(ITX)</strong><br>
 <strong>관련 부분 : KeyLED</strong><br>
