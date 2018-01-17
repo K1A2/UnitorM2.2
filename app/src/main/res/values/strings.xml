@@ -37,7 +37,7 @@
     <string name="toast_save_succeed">Save Succeed</string>
     <string name="toast_save_fail">Save Failed</string>
     <string name="text_add_sound">Add Sounds</string>
-    <string name="radio_mode_add">Edite</string>
+    <string name="radio_mode_add">Edit</string>
     <string name="radio_mode_test">Test</string>
     <string name="button_file_select">Add</string>
     <string name="text_file_longClick">If you do \'Long Click\', you can play Sound</string>
