@@ -1,4 +1,12 @@
 # UnitorM2.2 오류 제보
+<style>
+  table, th, td {
+    border: 1px solid #bcbcbc;
+  }
+  table {
+    width: 1200px;
+  }
+</style>
 <br>
 <table>
     <thead>
