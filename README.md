@@ -23,14 +23,12 @@
         <th>딜레이 값 입력 후 재수정 할때 뒤에 띄어쓰기가 붙어서 출력이 되고 \n기능을 하는것 같다.</th>
     </tbody>
     <br>
-    <br>
     <tbody2>
         <th>DUX</th>
         <th>카카오톡(ITX)</th>
         <th>음악 파일 선택</th>
         <th>사운드 파일 선택시 파일 이름에 공백이 있으면 표시 되지 않게</th>
     </tbody2>
-    <br>
     <br>
     <tbody3>
         <th>UNIUSER</th>
