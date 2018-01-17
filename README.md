@@ -1,18 +1,11 @@
 # UnitorM2.2 오류 제보
 <br>
-<style>
-    table {
-        border: 1px solid #bcbcbc;
-        width: 2000px;
-        height: 200px;
-    }
-</style>
 <table>
     <thead>
             <th>닉네임&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
             <th>제보 위치&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
             <th>관련 부분&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
-            <th>내용<th>
+            <th>내용</th>
     </thead>
     <br><br><br>
     <tbody>
@@ -29,7 +22,8 @@
         <th>&nbsp;음악 파일 선택</th>
         <th> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;사운드 파일 선택시 파일 이름에 공백이 있으면 표시 되지 않게</th>
     </tbody2>
-    <br><br>
+    <br>
+    <br>
     <tbody3>
         <th>&nbsp;UNIUSER</th>
         <th>&nbsp;&nbsp;&nbsp;카페-버그제보</th>
