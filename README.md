@@ -27,7 +27,7 @@
 <strong>닉네임 : KoreaPotato</strong><br>
 <strong>제보 위치 : 디스코드</strong><br>
 <strong>관련 부분 : workled 파일</strong><br>
-<strong>내용 : </strong><br><img src="@drawable/d.png"><br>ㅋ<img src="D:\UnitorM2.2\d.png"<br><br><br>
+<strong>내용 : </strong><br><img src="@drawable/d.png"><br>ㅋ<img src="D:\UnitorM2.2\d.png"><br><br><br>
 <strong>닉네임 :</strong><br>
 <strong>제보 위치 : </strong><br>
 <strong>관련 부분 : </strong><br>
