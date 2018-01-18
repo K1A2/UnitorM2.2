@@ -1,26 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent"
-    android:orientation="vertical" android:padding="5dp">
+    android:orientation="vertical" android:layout_width="match_parent" android:padding="5dp"
+    android:layout_height="match_parent">
 
     <RelativeLayout
         android:id="@+id/Layout_KeyLeft"
-        android:layout_marginRight="5dp"
         android:layout_width="match_parent"
+        android:layout_marginRight="5dp"
         android:layout_height="match_parent"
         android:layout_toLeftOf="@+id/Layout_Btns">
 
         <LinearLayout
-            android:id="@+id/Layout_Main_LED"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:id="@+id/Layout_LED_MAIN"
             android:orientation="vertical">
 
             <Button
-                android:id="@+id/Btn_NewLED"
+                android:id="@+id/Btn_NEWLED"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/btn_add_LED"/>
+                android:text="@string/btn_add_LED" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -30,7 +30,7 @@
             <ListView
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:id="@+id/list_LED"
+                android:id="@+id/List_LED"
                 android:layout_weight="1"></ListView>
 
         </LinearLayout>
@@ -45,7 +45,8 @@
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/btn_add" />
+                android:text="@string/btn_add"
+                android:id="@+id/Btn_ADD"/>
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -57,13 +58,14 @@
                     android:layout_height="match_parent"
                     android:cursorVisible="false"
                     android:background="@null"
+                    android:gravity="start"
                     android:textSize="15dp"
                     android:textStyle="normal"/>
 
                 <ListView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:id="@+id/list_sound_content"></ListView>
+                    android:id="@+id/List_SOUND_CONTENT"></ListView>
 
             </RelativeLayout>
 
@@ -73,12 +75,12 @@
                 android:orientation="horizontal">
 
                 <ImageButton
-                    android:id="@+id/Btn_Play"
-                    android:layout_marginTop="3dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_arrow_drop_down_circle_white_24dp"
-                    android:background="#00FFFFFF"/>
+                    android:src="@drawable/ic_play_circle_filled_black_36dp"
+                    android:background="#00ffffff"
+                    android:id="@+id/Btn_PLAY"
+                    android:layout_marginTop="3dp"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -86,14 +88,14 @@
                     android:gravity="right">
 
                     <ImageButton
-                        android:id="@+id/LED_mode_switch"
-                        android:layout_marginLeft="5dp"
-                        android:layout_gravity="right"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/ic_remove_red_eye_white_18dp"
+                        android:src="@drawable/ic_remove_red_eye_black_18dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_gravity="right"
                         android:adjustViewBounds="true"
-                        android:scaleType="fitXY"/>
+                        android:scaleType="fitXY"
+                        android:id="@+id/LED_switch"/>
 
                 </LinearLayout>
 
@@ -104,9 +106,9 @@
     </RelativeLayout>
 
     <LinearLayout
-        android:id="@+id/Layout_Btns"
         android:layout_width="300dp"
         android:layout_height="match_parent"
+        android:id="@+id/Layout_Btns"
         android:layout_centerHorizontal="true"
         android:orientation="vertical">
 
@@ -121,26 +123,27 @@
 
     <LinearLayout
         android:id="@+id/Layout_KeyRight"
-        android:layout_marginLeft="5dp"
-        android:layout_toRightOf="@id/Layout_Btns"
         android:layout_width="match_parent"
+        android:layout_marginLeft="5dp"
         android:layout_height="match_parent"
+        android:layout_toRightOf="@+id/Layout_Btns"
         android:orientation="horizontal">
 
         <ScrollView
-            android:layout_marginRight="5dp"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:layout_marginRight="5dp">
 
             <RelativeLayout
-                android:id="@+id/KeySound_Right"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:id="@+id/KeySound_Right">
 
                 <RadioGroup
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:id="@+id/RadioG_chain"></RadioGroup>
+                    android:id="@+id/RadioG_chain">
+                </RadioGroup>
 
             </RelativeLayout>
 
@@ -158,40 +161,41 @@
                 android:id="@+id/Spinner_color"></Spinner>
 
             <CheckBox
-                android:id="@+id/check_LED_off"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="3dp"
+                android:id="@+id/Check_LEDOFF"
                 android:text="@string/check_LED_off"/>
 
             <CheckBox
-                android:id="@+id/check_delete_LED"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:id="@+id/Check_deleteLED"
                 android:layout_marginBottom="3dp"
                 android:text="@string/check_delete_LED"/>
 
             <TextView
-                android:id="@+id/content_frame"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="1"/>
+                android:layout_weight="1"
+                android:id="@+id/content_frame"/>
 
             <Button
-                android:id="@+id/button_edit_another"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
-                android:textColor="@color/colorAccent"
+                android:text="@string/button_edit_another"
                 android:background="#00FFFFFF"
-                android:text="@string/button_edit_another"/>
+                android:id="@+id/Button_Editan"
+                android:textColor="@color/colorAccent"/>
 
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="right"
+                android:text="@string/save"
                 android:layout_alignParentRight="true"
-                android:text="@string/save"/>
+                android:id="@+id/keyLED_save_btn"
+                android:layout_gravity="right"/>
 
         </LinearLayout>
 

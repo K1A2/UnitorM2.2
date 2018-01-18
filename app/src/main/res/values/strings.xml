@@ -50,4 +50,5 @@
     <string name="check_delete_LED">Delete LED</string>
     <string name="button_edit_another">Edit Another</string>
     <string name="save">Save</string>
+    <string name="text_nochain">Please set \'Chain\' in Info tab</string>
 </resources>

@@ -50,4 +50,5 @@
     <string name="check_delete_LED">LED 삭제</string>
     <string name="button_edit_another">다른 버튼 편집</string>
     <string name="save">저장</string>
+    <string name="text_nochain">Info탭에서 \'체인\'을 지정해 주세요</string>
 </resources>
