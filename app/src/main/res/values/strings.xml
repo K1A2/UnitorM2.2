@@ -43,4 +43,11 @@
     <string name="text_file_longClick">If you do \'Long Click\', you can play Sound</string>
     <string name="async_copy_sound_title">Copying Sound Files..</string>
     <string name="async_copy_sound_finish">Finish copy all sound files.</string>
+    <string name="btn_add_LED">Add New LED</string>
+    <string name="text_current">Location : \'%s\'</string>
+    <string name="btn_add">Add</string>
+    <string name="check_LED_off">LED OFF</string>
+    <string name="check_delete_LED">Delete LED</string>
+    <string name="button_edit_another">Edit Another</string>
+    <string name="save">Save</string>
 </resources>

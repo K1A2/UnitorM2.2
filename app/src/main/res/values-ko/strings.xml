@@ -43,4 +43,11 @@
     <string name="text_file_longClick">길게 누르면 소리가 재생됩니다</string>
     <string name="async_copy_sound_title">사운드 파일 복사중..</string>
     <string name="async_copy_sound_finish">사운드를 모두 가져왔습니다</string>
+    <string name="btm_add_LED">LED 만들기</string>
+    <string name="text_current">위치 : \'%s\'</string>
+    <string name="btn_add">추가</string>
+    <string name="check_LED_off">LED 끄기</string>
+    <string name="check_delete_LED">LED 삭제</string>
+    <string name="button_edit_another">다른 버튼 편집</string>
+    <string name="save">저장</string>
 </resources>

@@ -55,12 +55,14 @@
         android:layout_centerHorizontal="true"
         android:id="@+id/Layout_Btns"/>
 
+
     <LinearLayout
         android:id="@+id/Layout_KeyRight"
         android:layout_width="match_parent"
         android:layout_marginLeft="5dp"
         android:layout_height="match_parent"
         android:layout_toRightOf="@+id/Layout_Btns"
-        android:orientation="horizontal"></LinearLayout>
+        android:orientation="horizontal">
+    </LinearLayout>
 
 </RelativeLayout>
