@@ -34,7 +34,8 @@
             android:name=".activitys.TabHostActivity"
             android:launchMode="singleTask"
             android:screenOrientation="sensorLandscape" />
-        <activity android:name=".activitys.KeyLEDFragment" />
+        <activity android:name=".activitys.KeyLEDFragment"/>
+        <activity android:name=".activitys.ConvertFragment"/>
     </application>
 
 </manifest>

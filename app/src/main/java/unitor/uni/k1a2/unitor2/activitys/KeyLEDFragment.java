@@ -26,10 +26,6 @@ import unitor.uni.k1a2.unitor2.R;
 
 public class KeyLEDFragment extends Fragment {
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        final View root = inflater.inflate(R.layout.fragment_keyled, container, false);
 
-    }
 
 }
