@@ -23,7 +23,7 @@
 <strong>닉네임 : CHIDI</strong><br>
 <strong>제보 위치 : 디스코드</strong><br>
 <strong>관련 부분 : 앱 테마</strong><br>
-<strong>내용 : 앱 light 태마에서 흰 led가 잘 안보인다. (ITX의 한마디.. : 다크만 지원하시는게 어떠신지..) - </strong><br><br><br>
+<strong>내용 : 앱 light 태마에서 흰 led가 잘 안보인다. (ITX의 한마디.. : 다크만 지원하시는게 어떠신지..)</strong><br><br><br>
 <strong>닉네임 : KoreaPotato</strong><br>
 <strong>제보 위치 : 디스코드(ITX)</strong><br>
 <strong>관련 부분 : workled 파일</strong><br>
