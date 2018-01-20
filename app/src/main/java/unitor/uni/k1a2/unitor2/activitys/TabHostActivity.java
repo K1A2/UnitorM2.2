@@ -60,6 +60,12 @@ public class TabHostActivity extends AppCompatActivity implements MultiDialog.On
         keySoundTab.setTabListener(b);
         actionBar.addTab(keySoundTab);
 
+        ActionBar.Tab keyLEDTab = actionBar.newTab();
+        keyLEDTab.setText("KeyLED");
+        TabsListener<KeyLEDFragment> c = new TabsListener<KeyLEDFragment>(this, "KeyLED", KeyLEDFragment.class);
+        keyLEDTab.setTabListener(c);
+        actionBar.addTab(keyLEDTab);
+
         if (savedInstanceState != null) {
             actionBar.setSelectedNavigationItem(savedInstanceState.getInt("tabId"));
         }

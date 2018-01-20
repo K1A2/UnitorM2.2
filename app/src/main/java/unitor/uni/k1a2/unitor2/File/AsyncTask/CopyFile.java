@@ -9,6 +9,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
 
+import unitor.uni.k1a2.unitor2.File.FileIO;
 import unitor.uni.k1a2.unitor2.File.FileKey;
 import unitor.uni.k1a2.unitor2.File.SharedPreference.PreferenceKey;
 import unitor.uni.k1a2.unitor2.File.SharedPreference.SharedPreferenceIO;
@@ -19,11 +20,13 @@ import unitor.uni.k1a2.unitor2.activitys.KeySoundFragment;
  * Created by jckim on 2018-01-14.
  */
 
-public class CopyFile extends AsyncTask<Object, Object, String> {
+public class CopyFile extends AsyncTask<Object, Object, String[]> {
 
     private Context context;
     private KeySoundFragment keySoundFragment;
     private ProgressDialog progressDialog;
+    private String errMsg;
+    private boolean cancelable = false;
 
     @Override
     protected void onPreExecute() {
@@ -34,7 +37,7 @@ public class CopyFile extends AsyncTask<Object, Object, String> {
     }
 
     @Override
-    protected String doInBackground(Object... objects) {//key, files, context, fragment
+    protected String[] doInBackground(Object... objects) {//key, files, context, fragment
         String key = (String)objects[0];
         ArrayList<String[]> files = (ArrayList<String[]>) objects[1];
         context = (Context) objects[2];
@@ -51,6 +54,7 @@ public class CopyFile extends AsyncTask<Object, Object, String> {
         progressDialog.setMax(files.size());
 
         for (int i = 0;i < files.size();i++) {//name, path
+            if (cancelable ==true) return new String[] {key, errMsg};
             String title = files.get(i)[0];
             String path = files.get(i)[1];
             publishProgress(i, path);
@@ -58,7 +62,7 @@ public class CopyFile extends AsyncTask<Object, Object, String> {
             copyFile(new File(path), path_unipack, title);
         }
 
-        return key;
+        return new String[] {key};
     }
 
     @Override
@@ -68,14 +72,20 @@ public class CopyFile extends AsyncTask<Object, Object, String> {
     }
 
     @Override
-    protected void onPostExecute(String s) {
-        if (s == FileKey.KEY_COPY_SOUND) {
-            if (keySoundFragment != null) {
-                keySoundFragment.addSound();
+    protected void onPostExecute(String[] s) {
+        if (s.length == 2) {
+            new FileIO(context).showErr(s[1]);
+        } else {
+            if (s[0] == FileKey.KEY_COPY_SOUND) {
+                if (keySoundFragment != null) {
+                    keySoundFragment.addSound();
+                }
+                progressDialog = new ProgressDialog(context);
+                progressDialog.setMessage(context.getString(R.string.async_copy_sound_finish));
+                progressDialog.show();
+            } else if (s[0] == FileKey.KEY_COPY_LED) {
+
             }
-            progressDialog = new ProgressDialog(context);
-            progressDialog.setMessage(context.getString(R.string.async_copy_sound_finish));
-            progressDialog.show();
         }
     }
 
@@ -95,6 +105,8 @@ public class CopyFile extends AsyncTask<Object, Object, String> {
                 fis.close();
             } catch (Exception e) {
                 e.printStackTrace();
+                cancelable = true;
+                errMsg = e.getMessage();
             }
             result = true;
         }else{

@@ -111,11 +111,33 @@ public class FileIO extends ContextWrapper {
         }
     }
 
+    //info내용 가져옴
     public ArrayList<String> getInfo(String path) throws Exception {
         path += "info";
         return getTextFile(new File(path));
     }
 
+    //사운드 파일 가져옴
+    public ArrayList<String[]> getSoundFile(String path) throws Exception {
+        File path_sound = new File(path);
+        ArrayList<String[]> sounds = new ArrayList<String[]>();
+
+        isExists(path_sound, FileKey.KEY_DIRECTORY_INT);
+        File[] soundlist = path_sound.listFiles(new FileFilter() {
+            @Override
+            public boolean accept(File file) {
+                return file.isFile()&&(file.getName().endsWith(".wav")||file.getName().endsWith(".mp3"));
+            }
+        });
+
+        for (File f:soundlist) {
+            sounds.add(new String[] {f.getName(), f.getAbsolutePath()});
+        }
+
+        return sounds;
+    }
+
+    //새 유팩생성
     public void mkNewUnipack(String Title, String Producer, String Chain, String path) throws Exception {
         File file = new File(path);
         isExists(file, FileKey.KEY_DIRECTORY_INT);
@@ -124,6 +146,7 @@ public class FileIO extends ContextWrapper {
         mkInfo(Title, Producer, Chain, path);
     }
 
+    //인포 생성, 저장
     public void mkInfo(String Title, String Producer, String Chain, String path) throws Exception {
         File file = new File(path);
         isExists(file, FileKey.KEY_FILE_INT);
