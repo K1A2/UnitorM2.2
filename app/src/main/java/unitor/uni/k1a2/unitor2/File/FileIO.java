@@ -101,7 +101,9 @@ public class FileIO extends ContextWrapper {
             String line;
 
             while ((line = bufferedReader.readLine()) != null) {
-                arrayFile.add(line);
+                if (!line.isEmpty()) {
+                    arrayFile.add(line);
+                }
             }
             bufferedReader.close();
 
@@ -114,6 +116,17 @@ public class FileIO extends ContextWrapper {
     //info내용 가져옴
     public ArrayList<String> getInfo(String path) throws Exception {
         path += "info";
+        return getTextFile(new File(path));
+    }
+
+    //키사운드 워크파일
+    public ArrayList<String> getKeySoundWork() throws Exception {
+        return getTextFile(new File(getDefaultPath()  + "unipackProject/work/keySound.txt"));
+    }
+
+    //키사운드 가져옴
+    public ArrayList<String> getKeySound(String path) throws Exception {
+        path += "keySound";
         return getTextFile(new File(path));
     }
 
@@ -153,6 +166,35 @@ public class FileIO extends ContextWrapper {
 
         PrintWriter printWriter = new PrintWriter(file);
         printWriter.printf(FileKey.KEY_INFO_CONTENT, Title, Producer, Chain);
+        printWriter.close();
+    }
+
+    //키사운드 워크폴더에 저장
+    public void mkKeySoundWork(ArrayList<String> content) throws Exception {
+        String path = getDefaultPath() + "unipackProject/work/";
+        File file = new File(path);
+        isExists(file, FileKey.KEY_DIRECTORY_INT);
+        path += "keySound.txt";
+        file = new File(path);
+        isExists(file, FileKey.KEY_FILE_INT);
+
+        PrintWriter printWriter = new PrintWriter(file);
+        for (String s:content) {
+            printWriter.println(s);
+        }
+        printWriter.close();
+    }
+
+    //키사운드 생성 저장
+    public void mkKeySound(String path) throws Exception {
+        ArrayList<String> content = getKeySoundWork();
+        File file = new File(path);
+        isExists(file, FileKey.KEY_FILE_INT);
+
+        PrintWriter printWriter = new PrintWriter(file);
+        for (String s:content) {
+            printWriter.println(s);
+        }
         printWriter.close();
     }
 

@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity implements MultiDialog.OnUni
     private MultiDialog multiDialog;
     private UnipackListItem unipackListItem = null;
     private UnipackListAdapter unipackListAdapter = null;
-    private SharedPreferenceIO sharedPreferenceIO = null;
+    private SharedPreferenceIO sharedPreferenceIO = null, sharedKill;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -157,6 +157,34 @@ public class MainActivity extends AppCompatActivity implements MultiDialog.OnUni
         fab_new.setOnClickListener(OnFloatingButtonClick);
         fab_import.setOnClickListener(OnFloatingButtonClick);
         fab_setting.setOnClickListener(OnFloatingButtonClick);
+
+        sharedKill = new SharedPreferenceIO(this, PreferenceKey.KEY_REPOSITORY_KILL);
+        final boolean killed = sharedKill.getBoolean(PreferenceKey.KEY_KILL_DIED, false);
+        if (killed) {
+            sharedPreferenceIO = new SharedPreferenceIO(this, PreferenceKey.KEY_REPOSITORY_INFO);
+            String title = sharedPreferenceIO.getString(PreferenceKey.KEY_INFO_TITLE, "");
+
+            AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+            alertDialog.setTitle(String.format(getString(R.string.alert_recover), title));
+            alertDialog.setMessage(String.format(getString(R.string.alert_die_M), title));
+            alertDialog.setPositiveButton(getString(R.string.alert_die_OK), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    Intent intent = new Intent(MainActivity.this, TabHostActivity.class);
+                    intent.putExtra("KILL", true);
+                    startActivity(intent);
+                    finish();
+                }
+            });
+            alertDialog.setNegativeButton(getString(R.string.alert_die_NO), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    sharedKill.setBoolean(PreferenceKey.KEY_KILL_DIED, false);
+                }
+            });
+            alertDialog.setCancelable(false);
+            alertDialog.show();
+        }
     }
 
     @Override
@@ -171,7 +199,9 @@ public class MainActivity extends AppCompatActivity implements MultiDialog.OnUni
         sharedPreferenceIO.setString(PreferenceKey.KEY_INFO_PRODUCER, string_producer);
         sharedPreferenceIO.setString(PreferenceKey.KEY_INFO_CHAIN, string_chain);
         sharedPreferenceIO.setString(PreferenceKey.KEY_INFO_PATH, string_path);
-        startActivity(new Intent(MainActivity.this, TabHostActivity.class));
+        Intent intent = new Intent(MainActivity.this, TabHostActivity.class);
+        intent.putExtra("KILL", false);
+        startActivity(intent);
         finish();
     }
 

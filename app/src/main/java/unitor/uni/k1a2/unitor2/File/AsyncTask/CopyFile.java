@@ -20,7 +20,7 @@ import unitor.uni.k1a2.unitor2.activitys.KeySoundFragment;
  * Created by jckim on 2018-01-14.
  */
 
-public class CopyFile extends AsyncTask<Object, Object, String[]> {
+public class CopyFile extends AsyncTask<Object, Object, Object[]> {
 
     private Context context;
     private KeySoundFragment keySoundFragment;
@@ -28,59 +28,71 @@ public class CopyFile extends AsyncTask<Object, Object, String[]> {
     private String errMsg;
     private boolean cancelable = false;
 
+    public CopyFile(Context context) {
+        this.context = context;
+    }
+
     @Override
     protected void onPreExecute() {
         progressDialog = new ProgressDialog(context);
         progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
         progressDialog.setCanceledOnTouchOutside(false);
         progressDialog.setCancelable(false);
+        progressDialog.show();
     }
 
     @Override
-    protected String[] doInBackground(Object... objects) {//key, files, context, fragment
+    protected Object[] doInBackground(Object... objects) {//key, files, context, fragment
         String key = (String)objects[0];
         ArrayList<String[]> files = (ArrayList<String[]>) objects[1];
         context = (Context) objects[2];
-        String path_unipack;
-
-        if (key == FileKey.KEY_COPY_SOUND) {
-            progressDialog.setTitle(context.getString(R.string.async_copy_sound_title));
-            keySoundFragment = (KeySoundFragment) objects[3];
-        }
-        progressDialog.show();
+        String path_target;
 
         SharedPreferenceIO shIO = new SharedPreferenceIO(context, PreferenceKey.KEY_REPOSITORY_INFO);
-        path_unipack = shIO.getString(PreferenceKey.KEY_INFO_PATH, "");
+        path_target = shIO.getString(PreferenceKey.KEY_INFO_PATH, "");
         progressDialog.setMax(files.size());
 
+        if (key == FileKey.KEY_COPY_SOUND) {
+            publishProgress(context.getString(R.string.async_copy_sound_title));
+            path_target = path_target + "sounds/";
+        }
+
         for (int i = 0;i < files.size();i++) {//name, path
-            if (cancelable ==true) return new String[] {key, errMsg};
+            if (cancelable ==true) return new Object[] {key, objects[3], errMsg};
             String title = files.get(i)[0];
             String path = files.get(i)[1];
             publishProgress(i, path);
 
-            copyFile(new File(path), path_unipack, title);
+            copyFile(new File(path), path_target, title);
         }
 
-        return new String[] {key};
+        return new Object[] {key, objects[3]};
     }
 
     @Override
     protected void onProgressUpdate(Object... values) {
-        progressDialog.setProgress((int)values[0]);
-        progressDialog.setMessage((String)values[1]);
+        if (values.length == 1) {
+            progressDialog.setTitle((String) values[0]);
+        } else {
+            progressDialog.setProgress((int)values[0]);
+            progressDialog.setMessage((String)values[1]);
+        }
     }
 
     @Override
-    protected void onPostExecute(String[] s) {
-        if (s.length == 2) {
-            new FileIO(context).showErr(s[1]);
+    protected void onPostExecute(Object[] s) {
+        progressDialog.dismiss();
+        if (s.length == 3) {
+            new FileIO(context).showErr((String) s[2]);
         } else {
             if (s[0] == FileKey.KEY_COPY_SOUND) {
+                keySoundFragment = (KeySoundFragment) s[1];
                 if (keySoundFragment != null) {
                     keySoundFragment.addSound();
                 }
                 progressDialog = new ProgressDialog(context);
+                progressDialog.setCanceledOnTouchOutside(true);
+                progressDialog.setCancelable(true);
                 progressDialog.setMessage(context.getString(R.string.async_copy_sound_finish));
                 progressDialog.show();
             } else if (s[0] == FileKey.KEY_COPY_LED) {

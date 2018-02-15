@@ -54,4 +54,15 @@
     <string name="menu_sound_select">선택</string>
     <string name="menu_sound_delete">삭제</string>
     <string name="menu_sound_play">재생</string>
+    <string name="async_load_sound_title">사운드 로딩중..</string>
+    <string name="spinner_chain">%s 체인</string>
+    <string name="checkbox_delete_sound">사운드 지우기</string>
+    <string name="saveall">전체저장</string>
+    <string name="save_info">Info 저장</string>
+    <string name="save_keySound">keySound 저장</string>
+    <string name="save_KeyLED">keyLED 저장</string>
+    <string name="alert_recover">\'%s\' 이어서만들기</string>
+    <string name="alert_die_M">\'%s\'가 저장되지 않고 종료되었습니다. 이어서 만들겠습니까? 지금 거부하면 이전에 편집한것은 사라집니다.</string>
+    <string name="alert_die_OK">이어하기</string>
+    <string name="alert_die_NO">안하기</string>
 </resources>

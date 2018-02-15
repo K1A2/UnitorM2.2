@@ -7,13 +7,11 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.Random;
 
 import unitor.uni.k1a2.unitor2.File.FileIO;
 import unitor.uni.k1a2.unitor2.File.SharedPreference.PreferenceKey;
@@ -29,7 +27,6 @@ public class InfoFragment extends Fragment {
     private EditText edit_Title = null;
     private EditText edit_Producer = null;
     private EditText edit_Chain = null;
-    private Button button_Save = null;
     private TextView text_Info = null;
 
     private SharedPreferenceIO sharedPreferenceIO = null;
@@ -48,7 +45,6 @@ public class InfoFragment extends Fragment {
         edit_Title = (EditText) root.findViewById(R.id.Edit_Title);
         edit_Producer = (EditText) root.findViewById(R.id.Edit_Producer);
         edit_Chain = (EditText) root.findViewById(R.id.Edit_Chain);
-        button_Save = (Button) root.findViewById(R.id.Button_Save);
         text_Info = (TextView) root.findViewById(R.id.Text_info);
 
         sharedPreferenceIO = new SharedPreferenceIO(getContext(), PreferenceKey.KEY_REPOSITORY_INFO);
@@ -59,26 +55,6 @@ public class InfoFragment extends Fragment {
         producer = sharedPreferenceIO.getString(PreferenceKey.KEY_INFO_PRODUCER, "");
         chain = sharedPreferenceIO.getString(PreferenceKey.KEY_INFO_CHAIN, "");
         path = sharedPreferenceIO.getString(PreferenceKey.KEY_INFO_PATH, "");
-
-        if (path.equals("")) {
-            if (title.equals("")) {
-                //타이틀 없으면 랜덤으로 조합
-                Random random = new Random();
-                StringBuffer stringBuffer = new StringBuffer();
-                for (int i = 0;i < 7;i++) {
-                    if (random.nextBoolean()) {
-                        stringBuffer.append((char)((int)(random.nextInt(26))+97));
-                    } else {
-                        stringBuffer.append((random.nextInt(10)));
-                    }
-                }
-                title = stringBuffer.toString();
-                sharedPreferenceIO.setString(PreferenceKey.KEY_INFO_TITLE, title);
-                edit_Title.setText(title);
-            }
-            path = fileIO.getDefaultPath() + title + "/";
-            sharedPreferenceIO.setString(PreferenceKey.KEY_INFO_PATH, path);
-        }
 
         setText_Info();
 
@@ -139,26 +115,23 @@ public class InfoFragment extends Fragment {
             }
         });
 
-        button_Save.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (title.equals("")||producer.equals("")||chain.equals("")) {
-                    Toast.makeText(getContext(), getString(R.string.toast_newUnipack_null), Toast.LENGTH_LONG).show();
-                } else {
-                    try {
-                        fileIO.mkInfo(title, producer, chain, path + "info");
-                        Toast.makeText(getContext(), getString(R.string.toast_save_succeed), Toast.LENGTH_SHORT).show();
-                        setText_Info();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        fileIO.showErr(e.getMessage());
-                        Toast.makeText(getContext(), getString(R.string.toast_save_fail), Toast.LENGTH_SHORT).show();
-                    }
-                }
-            }
-        });
-
         return root;
+    }
+
+    public void saveInfo() {
+        if (title.equals("")||producer.equals("")||chain.equals("")) {
+            Toast.makeText(getContext(), getString(R.string.toast_newUnipack_null), Toast.LENGTH_LONG).show();
+        } else {
+            try {
+                fileIO.mkInfo(title, producer, chain, path + "info");
+                Toast.makeText(getContext(), getString(R.string.toast_save_succeed), Toast.LENGTH_SHORT).show();
+                setText_Info();
+            } catch (Exception e) {
+                e.printStackTrace();
+                fileIO.showErr(e.getMessage());
+                Toast.makeText(getContext(), getString(R.string.toast_save_fail), Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
     private void setText_Info() {

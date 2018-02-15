@@ -17,29 +17,29 @@ import unitor.uni.k1a2.unitor2.R;
  * Created by jckim on 2017-12-09.
  */
 
-public class PlayButtonView extends LinearLayout {
+public class PlayButton extends LinearLayout {
 
-    private TextView textView;
+    public TextView textView;
 
-    public PlayButtonView(Context context) {
+    public PlayButton(Context context) {
         super(context);
         iniView(context);
     }
 
-    public PlayButtonView(Context context, @Nullable AttributeSet attrs) {
+    public PlayButton(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         iniView(context);
         getAttrs(attrs);
     }
 
-    public PlayButtonView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public PlayButton(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         iniView(context);
         getAttrs(attrs, defStyleAttr);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    public PlayButtonView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+    public PlayButton(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
         iniView(context);
         getAttrs(attrs, defStyleAttr, defStyleRes);
@@ -48,7 +48,7 @@ public class PlayButtonView extends LinearLayout {
     private void iniView(Context context) {
         String infService = Context.LAYOUT_INFLATER_SERVICE;
         LayoutInflater layoutInflater = (LayoutInflater)getContext().getSystemService(infService);
-        View view = layoutInflater.inflate(R.layout.view_button_play, PlayButtonView.this, false);
+        View view = layoutInflater.inflate(R.layout.view_button_play, PlayButton.this, false);
         textView = (TextView) view.findViewById(R.id.View_Play_text);
 
         this.setClickable(true);
