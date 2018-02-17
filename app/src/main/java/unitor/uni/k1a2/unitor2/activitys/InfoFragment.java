@@ -36,7 +36,6 @@ public class InfoFragment extends Fragment {
     private String producer;
     private String chain;
     private String path;
-    private int chainInt;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

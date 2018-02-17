@@ -1,6 +1,5 @@
 package unitor.uni.k1a2.unitor2.activitys;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -9,14 +8,22 @@ import android.media.SoundPool;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.PowerManager;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.ActionBar;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.GestureDetector;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
+import android.view.View;
 import android.view.WindowManager;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import java.io.File;
@@ -44,14 +51,24 @@ public class TabHostActivity extends AppCompatActivity implements MultiDialog.On
     private SharedPreferenceIO sharedPreferenceIO = null;
     private long backKeyPress;
     private SharedPreferenceIO sharedPKill;
-    private boolean isKeppOn = false;
-    private boolean isUnload = false;
-    private boolean isKilledSelf = false;
     private ArrayList<Object[]> array_sounds = new ArrayList<Object[]>();
     private SoundPool soundPool;
     private MenuItem menu_save;
-    private ActionBar actionBar;
+    private GestureDetector gestureDetector;
     private PowerManager.WakeLock wakeLock = null;
+
+    private Toolbar toolbar;
+    private LinearLayout linear_Toolbar;
+    private TabLayout tabLayout;
+    private ViewPager viewPager;
+
+    private boolean isKeppOn = false;
+    private boolean isUnload = false;
+    private boolean isKilledSelf = false;
+    private boolean isShowing = true;
+    private static final int SWIPE_MIN_DISTANCE = 120;
+    private static final int SWIPE_MAX_OFF_PATH = 250;
+    private static final int SWIPE_THRESHOLD_VELOCITY = 100;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +82,10 @@ public class TabHostActivity extends AppCompatActivity implements MultiDialog.On
         sharedPreferenceIO = new SharedPreferenceIO(this, PreferenceKey.KEY_REPOSITORY_INFO);
         path = sharedPreferenceIO.getString(PreferenceKey.KEY_INFO_PATH, "");
         title = sharedPreferenceIO.getString(PreferenceKey.KEY_INFO_TITLE, "");
+
+        if (!getIntent().getBooleanExtra("KILL", false)) {
+            new File(fileIO.getDefaultPath() + "unipackProject/work/keySound.txt").delete();
+        }
 
         if (path.equals("")) {
             if (title.equals("")) {
@@ -87,40 +108,172 @@ public class TabHostActivity extends AppCompatActivity implements MultiDialog.On
 
         soundLoad(path + "sounds/");
 
-        //ActionBar
-        actionBar = getSupportActionBar();
-        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-        actionBar.setLogo(R.mipmap.ic_launcher);
-        actionBar.setDisplayShowHomeEnabled(true);
-        actionBar.setDisplayUseLogoEnabled(true);
+        //탭설정
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle("");
+        setSupportActionBar(toolbar);
+        tabLayout = (TabLayout) findViewById(R.id.tabs);
+        viewPager = (ViewPager) findViewById(R.id.container);
+        linear_Toolbar = (LinearLayout) findViewById(R.id.Layout_Toolbar);
 
         //Info Tab
-        ActionBar.Tab infoTab = actionBar.newTab();
+        TabLayout.Tab infoTab = tabLayout.newTab();
         infoTab.setText("Info");
-        TabsListener<InfoFragment> a = new TabsListener<InfoFragment>(this, "Info", InfoFragment.class);
-        infoTab.setTabListener(a);
-        actionBar.addTab(infoTab);
+        tabLayout.addTab(infoTab);
 
-        ActionBar.Tab keySoundTab = actionBar.newTab();
+        TabLayout.Tab keySoundTab = tabLayout.newTab();
         keySoundTab.setText("KeySound");
-        TabsListener<KeySoundFragment> b = new TabsListener<KeySoundFragment>(this, "KeySound", KeySoundFragment.class);
-        keySoundTab.setTabListener(b);
-        actionBar.addTab(keySoundTab);
+        tabLayout.addTab(keySoundTab);
 
-        ActionBar.Tab keyLEDTab = actionBar.newTab();
+        TabLayout.Tab keyLEDTab = tabLayout.newTab();
         keyLEDTab.setText("KeyLED");
-        TabsListener<KeyLEDFragment> c = new TabsListener<KeyLEDFragment>(this, "KeyLED", KeyLEDFragment.class);
-        keyLEDTab.setTabListener(c);
-        actionBar.addTab(keyLEDTab);
+        tabLayout.addTab(keyLEDTab);
 
-        if (savedInstanceState != null) {
-            actionBar.setSelectedNavigationItem(savedInstanceState.getInt("tabId"));
-        }
+        TabPagerAdapter tabPagerAdapter = new TabPagerAdapter(getSupportFragmentManager());
+        viewPager.setAdapter(tabPagerAdapter);
+        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                int position = tab.getPosition();
+                if (menu_save != null) {
+                    switch (position) {
+                        case 0:
+                            menu_save.setTitle(getString(R.string.save_info));
+                            break;
 
-        if (!getIntent().getBooleanExtra("KILL", false)) {
-            new File(fileIO.getDefaultPath() + "unipackProject/work/keySound.txt").delete();
-        }
+                        case 1:
+                            menu_save.setTitle(getString(R.string.save_keySound));
+                            break;
+
+                        case 2:
+                            menu_save.setTitle(getString(R.string.save_KeyLED));
+                            break;
+                    }
+                }
+                viewPager.setCurrentItem(position);
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
+
+        //제스쳐 인식 툴바 보이기/숨기기 TODO:제스쳐
+        gestureDetector = new GestureDetector(onGestureListener);
+
+        viewPager.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                //gestureDetector.onTouchEvent(motionEvent);
+                return false;
+            }
+        });
     }
+
+    private int getSlope (float x1, float y1, float x2, float y2) {
+        Double angle = Math.toDegrees(Math.atan2(y1 - y2, x2 - x1));
+        if (angle > 45 && angle <= 135)
+            // top
+            return 1;
+        if (angle >= 135 && angle < 180 || angle < -135 && angle > -180)
+            // left
+            return 2;
+        if (angle < -45 && angle>= -135)
+            // down
+            return 3;
+        if (angle > -45 && angle <= 45)
+            // right
+            return 4;
+        return 0;
+    }
+
+    //TODO: 제스쳐
+    GestureDetector.OnGestureListener onGestureListener = new GestureDetector.OnGestureListener() {
+        @Override
+        public boolean onDown(MotionEvent motionEvent) {
+            return false;
+        }
+
+        @Override
+        public void onShowPress(MotionEvent motionEvent) {
+
+        }
+
+        @Override
+        public boolean onSingleTapUp(MotionEvent motionEvent) {
+            return false;
+        }
+
+        @Override
+        public boolean onScroll(MotionEvent motionEvent, MotionEvent motionEvent1, float v, float v1) {
+            return false;
+        }
+
+        @Override
+        public void onLongPress(MotionEvent motionEvent) {
+
+        }
+
+        @Override
+        public boolean onFling(MotionEvent motionEvent, MotionEvent motionEvent1, float v, float v1) {
+//                try {
+//                    if (Math.abs(motionEvent.getY() - motionEvent1.getY()) > SWIPE_MAX_OFF_PATH)
+//                        return false;
+//                    // down to up swipe
+//                    if (motionEvent.getY() - motionEvent1.getY() > SWIPE_MIN_DISTANCE && Math.abs(v1) > SWIPE_THRESHOLD_VELOCITY) {
+//                        Toast.makeText(TabHostActivity.this, "Swipe up", Toast.LENGTH_SHORT).show();
+//                        if (isShowing) {
+//                            linear_Toolbar.setVisibility(View.GONE);
+//                            isShowing = false;
+//                        }
+//                    }
+//                    // up to down swipe
+//                    else if (motionEvent1.getY() - motionEvent.getY() > SWIPE_MIN_DISTANCE && Math.abs(v1) > SWIPE_THRESHOLD_VELOCITY) {
+//                        Toast.makeText(TabHostActivity.this, "Swipe down", Toast.LENGTH_SHORT).show();
+//                        if (!isShowing) {
+//                            linear_Toolbar.setVisibility(View.VISIBLE);
+//                            isShowing = true;
+//                        }
+//                    }
+//                } catch (Exception e) {
+//
+//                }
+            switch (getSlope(motionEvent.getX(), motionEvent.getY(), motionEvent1.getX(), motionEvent1.getY())) {
+                case 1:
+                    Log.d("Swipe", "top");
+                    Toast.makeText(TabHostActivity.this, "Swipe up", Toast.LENGTH_SHORT).show();
+                    if (isShowing) {
+                        linear_Toolbar.setVisibility(View.GONE);
+                        isShowing = false;
+                    }
+                    return true;
+                case 2:
+                    Log.d("Swipe", "left");
+                    return true;
+                case 3:
+                    Log.d("Swipe", "down");
+                    Toast.makeText(TabHostActivity.this, "Swipe down", Toast.LENGTH_SHORT).show();
+                    if (!isShowing) {
+                        linear_Toolbar.setVisibility(View.VISIBLE);
+                        isShowing = true;
+                    }
+                    return true;
+                case 4:
+                    Log.d("Swipe", "right");
+                    return true;
+            }
+            return true;
+        }
+
+
+    };
 
     @Override
     public void onBackPressed() {
@@ -137,12 +290,6 @@ public class TabHostActivity extends AppCompatActivity implements MultiDialog.On
         }
     }
 
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putInt("tabId", getSupportActionBar().getSelectedNavigationIndex());
-    }
-
     //메뉴생성
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -156,16 +303,16 @@ public class TabHostActivity extends AppCompatActivity implements MultiDialog.On
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_save:
-                if (actionBar != null) {
-                    int index = actionBar.getSelectedNavigationIndex();
+                if (tabLayout != null) {
+                    int index = tabLayout.getSelectedTabPosition();
                     switch (index) {
                         case 0:
-                            InfoFragment infoFragment = (InfoFragment)getSupportFragmentManager().findFragmentByTag("Info");
+                            InfoFragment infoFragment = (InfoFragment)getSupportFragmentManager().findFragmentByTag("android:switcher:" + R.id.container + ":" + index);
                             infoFragment.saveInfo();
                             break;
 
                         case 1:
-                            KeySoundFragment keySoundFragment = (KeySoundFragment)getSupportFragmentManager().findFragmentByTag("KeySound");
+                            KeySoundFragment keySoundFragment = (KeySoundFragment)getSupportFragmentManager().findFragmentByTag("android:switcher:" + R.id.container + ":" + index);
                             keySoundFragment.saveKeySound();
                             break;
 
@@ -217,7 +364,7 @@ public class TabHostActivity extends AppCompatActivity implements MultiDialog.On
     //사운드파일
     @Override
     public void onFileSelect(ArrayList<String[]> files) {
-        new CopyFile(this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, FileKey.KEY_COPY_SOUND, files, this, (KeySoundFragment) getSupportFragmentManager().findFragmentByTag("KeySound"));
+        new CopyFile(this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, FileKey.KEY_COPY_SOUND, files, this, (KeySoundFragment) getSupportFragmentManager().findFragmentByTag("android:switcher:" + R.id.container + ":" + 1));
     }
 
     //파일 로딩
@@ -269,55 +416,35 @@ public class TabHostActivity extends AppCompatActivity implements MultiDialog.On
         soundLoad(path + "sounds/");
     }
 
-    //탭클릭리스너
-    private class TabsListener<T extends Fragment> implements ActionBar.TabListener {
+    private class TabPagerAdapter extends FragmentPagerAdapter {
 
-        private Fragment mfragment;
-        private final Activity mactivity;
-        private final String mtag;
-        private final Class<T> mclass;
-
-        public TabsListener (Activity activity, String tag, Class<T> clz) {
-            mactivity = activity;
-            mtag = tag;
-            mclass = clz;
+        public TabPagerAdapter(FragmentManager fm) {
+            super(fm);
         }
 
         @Override
-        public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft) {
-            if (menu_save != null) {
-                switch (tab.getPosition()) {
-                    case 0:
-                        menu_save.setTitle(getString(R.string.save_info));
-                        break;
+        public Fragment getItem(int position) {
+            switch (position) {
+                case 0:
+                    InfoFragment infoFragment = new InfoFragment();
+                    return infoFragment;
 
-                    case 1:
-                        menu_save.setTitle(getString(R.string.save_keySound));
-                        break;
+                case 1:
+                    KeySoundFragment keySoundFragment = new KeySoundFragment();
+                    return keySoundFragment;
 
-                    case 2:
-                        menu_save.setTitle(getString(R.string.save_KeyLED));
-                        break;
-                }
-            }
-            if (mfragment == null) {
-                mfragment = Fragment.instantiate(mactivity, mclass.getName());
-                ft.replace(android.R.id.content, mfragment, mtag);
-            } else {
-                ft.attach(mfragment);
+                case 2:
+                    KeyLEDFragment keyLEDFragment = new KeyLEDFragment();
+                    return keyLEDFragment;
+
+                default:
+                    return null;
             }
         }
 
         @Override
-        public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction ft) {
-            if (mfragment != null) {
-                ft.detach(mfragment);
-            }
-        }
-
-        @Override
-        public void onTabReselected(ActionBar.Tab tab, FragmentTransaction ft) {
-
+        public int getCount() {
+            return 3;
         }
     }
 

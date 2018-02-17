@@ -134,6 +134,7 @@ public class KeySoundFragment extends Fragment {
         } else {
             try {
                 array_content = fileIO.getKeySound(path);
+                fileIO.mkKeySoundWork(array_content);
             } catch (Exception e) {
                 array_content = null;
                 fileIO.showErr(e.getMessage());
