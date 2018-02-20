@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/UnitorM2.2.iml" filepath="$PROJECT_DIR$/UnitorM2.2.iml" />
       <module fileurl="file://C:\Users\jckim\AndroidStudioProjects\UnitorM22\UnitorM2.2.iml" filepath="C:\Users\jckim\AndroidStudioProjects\UnitorM22\UnitorM2.2.iml" />
+      <module fileurl="file://$PROJECT_DIR$/UnitorM22.iml" filepath="$PROJECT_DIR$/UnitorM22.iml" />
       <module fileurl="file://D:\UnitorM2.2\UnitorM22.iml" filepath="D:\UnitorM2.2\UnitorM22.iml" />
       <module fileurl="file://C:\Users\itban\StudioProjects\UnitorM2.2\UnitorM22.iml" filepath="C:\Users\itban\StudioProjects\UnitorM2.2\UnitorM22.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
