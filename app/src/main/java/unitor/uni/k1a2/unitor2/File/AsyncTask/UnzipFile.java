@@ -4,20 +4,19 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
-import android.widget.ListView;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 import unitor.uni.k1a2.unitor2.File.FileIO;
 import unitor.uni.k1a2.unitor2.R;
-import unitor.uni.k1a2.unitor2.views.adapters.list.UnipackListAdapter;
+import unitor.uni.k1a2.unitor2.views.adapters.recyclerview.UnipackListAdapter;
+import unitor.uni.k1a2.unitor2.views.adapters.recyclerview.UnipackListItem;
 
 /**
  * Created by jckim on 2017-12-06.
@@ -27,8 +26,7 @@ public class UnzipFile extends AsyncTask<Object, String, Boolean> {
 
     private Context context;
     private ProgressDialog progressDialog;
-    private ListView listView;
-    private String name;
+    private String name, path, target, finish;
     private UnipackListAdapter adapter;
 
     public UnzipFile(Context context) {
@@ -46,9 +44,8 @@ public class UnzipFile extends AsyncTask<Object, String, Boolean> {
     @Override
     protected Boolean doInBackground(Object... objects) {
         name = (String) objects[0];
-        String path = (String) objects[1];
-        String target = (String) objects[2];
-        listView = (ListView) objects[3];
+        path = (String) objects[1];
+        target = (String) objects[2];
         adapter = (UnipackListAdapter) objects[4];
         publishProgress("start", name);
 
@@ -57,9 +54,10 @@ public class UnzipFile extends AsyncTask<Object, String, Boolean> {
             ZipInputStream zipInputStream = new ZipInputStream(fileInputStream);
             ZipEntry zipEntry = null;
 
+            File targetFile = null;
             while ((zipEntry = zipInputStream.getNextEntry()) != null) {
                 String filenameTounzip = zipEntry.getName();
-                File targetFile = new File(target, filenameTounzip);
+                targetFile = new File(target, filenameTounzip);
 
                 if (zipEntry.isDirectory()) {
                     File pathF = new File(targetFile.getAbsolutePath());
@@ -73,6 +71,7 @@ public class UnzipFile extends AsyncTask<Object, String, Boolean> {
 
             fileInputStream.close();
             zipInputStream.close();
+            if (targetFile != null) finish = targetFile.getAbsolutePath();
             return true;
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -107,6 +106,13 @@ public class UnzipFile extends AsyncTask<Object, String, Boolean> {
         if (b == true) {
             progressDialog.setTitle(String.format(context.getString(R.string.dialog_unzip_sucT), name));
             progressDialog.setMessage(String.format(context.getString(R.string.dialog_unzip_sucM), name));
+            String[] s = new FileIO(context).getUnipackInfo(new File(finish + "/info"), finish + "/");
+            UnipackListItem item = new UnipackListItem();
+            item.setTitle(s[0]);
+            item.setProducer(s[1]);
+            item.setChain(s[2]);
+            item.setPath(s[3]);
+            adapter.addItem(item);
         } else {
             progressDialog.setTitle(String.format(context.getString(R.string.dialog_unzip_failT), name));
             progressDialog.setMessage(String.format(context.getString(R.string.dialog_unzip_failM), name));
@@ -118,14 +124,6 @@ public class UnzipFile extends AsyncTask<Object, String, Boolean> {
             }
         });
         progressDialog.show();
-        adapter.clear();
-        ArrayList<String[]> arrayUnipack = new FileIO(context).getUnipacks();
-        if (arrayUnipack != null) {
-            for (String[] unipackInfo:arrayUnipack) {
-                if (unipackInfo != null) adapter.addItem(unipackInfo[0], unipackInfo[1], unipackInfo[3], unipackInfo[2]);
-            }
-        }
-        listView.setAdapter(adapter);
     }
 
     private File Unzip(ZipInputStream zipInputStream, File targetFile) throws IOException {

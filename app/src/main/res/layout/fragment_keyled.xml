@@ -11,6 +11,11 @@
         android:layout_toLeftOf="@+id/Layout_Btns"
         android:orientation="vertical">
 
+        <android.support.v7.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/Recycle_led_list"></android.support.v7.widget.RecyclerView>
+
     </LinearLayout>
 
     <include
@@ -21,13 +26,20 @@
         android:id="@+id/Layout_Btns"/>
 
 
-    <RelativeLayout
+    <LinearLayout
         android:id="@+id/Layout_KeyRight"
         android:layout_width="match_parent"
         android:layout_marginLeft="5dp"
         android:layout_height="match_parent"
-        android:layout_toRightOf="@+id/Layout_Btns">
+        android:layout_toRightOf="@+id/Layout_Btns"
+        android:orientation="vertical">
 
-    </RelativeLayout>
+        <Spinner
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/Spinner_chain_L"
+            android:layout_marginBottom="3dp"></Spinner>
+
+    </LinearLayout>
 
 </RelativeLayout>

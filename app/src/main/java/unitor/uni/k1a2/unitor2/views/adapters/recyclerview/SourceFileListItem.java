@@ -1,7 +1,7 @@
-package unitor.uni.k1a2.unitor2.views.adapters.list;
+package unitor.uni.k1a2.unitor2.views.adapters.recyclerview;
 
 /**
- * Created by jckim on 2017-12-05.
+ * Created by jckim on 2018-02-17.
  */
 
 public class SourceFileListItem {

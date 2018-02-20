@@ -29,11 +29,16 @@ public class FileIO extends ContextWrapper {
         this.defaultPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/";
     }
 
-    //저장소 경로 리턴
-    public String getDefaultPath() {
-        return defaultPath;
+    //새 유팩생성
+    public void mkNewUnipack(String Title, String Producer, String Chain, String path) throws Exception {
+        File file = new File(path);
+        isExists(file, FileKey.KEY_DIRECTORY_INT);
+
+        path += "info";
+        mkInfo(Title, Producer, Chain, path);
     }
 
+    /**유니팩 관련**/
     //unipackproject폴더에 유니팩 리턴
     public ArrayList<String[]> getUnipacks() {
         File unipackprojectf = new File(defaultPath + "unipackProject/");
@@ -93,32 +98,24 @@ public class FileIO extends ContextWrapper {
         }
     }
 
-    //파일내용 가져옴
-    public ArrayList<String> getTextFile(File file) throws Exception {
-        if (file.exists()) {
-            ArrayList<String> arrayFile = new ArrayList<String>();
-            BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
-            String line;
-
-            while ((line = bufferedReader.readLine()) != null) {
-                if (!line.isEmpty()) {
-                    arrayFile.add(line);
-                }
-            }
-            bufferedReader.close();
-
-            return arrayFile;
-        } else {
-            return null;
-        }
-    }
-
+    /**인포 관련**/
     //info내용 가져옴
     public ArrayList<String> getInfo(String path) throws Exception {
         path += "info";
         return getTextFile(new File(path));
     }
 
+    //인포 생성, 저장
+    public void mkInfo(String Title, String Producer, String Chain, String path) throws Exception {
+        File file = new File(path);
+        isExists(file, FileKey.KEY_FILE_INT);
+
+        PrintWriter printWriter = new PrintWriter(file);
+        printWriter.printf(FileKey.KEY_INFO_CONTENT, Title, Producer, Chain);
+        printWriter.close();
+    }
+
+    /**키사운드 관련**/
     //키사운드 워크파일
     public ArrayList<String> getKeySoundWork() throws Exception {
         return getTextFile(new File(getDefaultPath()  + "unipackProject/work/keySound.txt"));
@@ -150,25 +147,6 @@ public class FileIO extends ContextWrapper {
         return sounds;
     }
 
-    //새 유팩생성
-    public void mkNewUnipack(String Title, String Producer, String Chain, String path) throws Exception {
-        File file = new File(path);
-        isExists(file, FileKey.KEY_DIRECTORY_INT);
-
-        path += "info";
-        mkInfo(Title, Producer, Chain, path);
-    }
-
-    //인포 생성, 저장
-    public void mkInfo(String Title, String Producer, String Chain, String path) throws Exception {
-        File file = new File(path);
-        isExists(file, FileKey.KEY_FILE_INT);
-
-        PrintWriter printWriter = new PrintWriter(file);
-        printWriter.printf(FileKey.KEY_INFO_CONTENT, Title, Producer, Chain);
-        printWriter.close();
-    }
-
     //키사운드 워크폴더에 저장
     public void mkKeySoundWork(ArrayList<String> content) throws Exception {
         String path = getDefaultPath() + "unipackProject/work/";
@@ -198,6 +176,27 @@ public class FileIO extends ContextWrapper {
         printWriter.close();
     }
 
+    /**LED관련**/
+    public ArrayList<String[]> getLEDFile(String path) throws Exception {
+        File path_led = new File(path);
+        ArrayList<String[]> leds = new ArrayList<String[]>();
+
+        isExists(path_led, FileKey.KEY_DIRECTORY_INT);
+        File[] ledlist = path_led.listFiles(new FileFilter() {
+            @Override
+            public boolean accept(File file) {
+                return file.isFile();
+            }
+        });
+
+        for (File f:ledlist) {
+            leds.add(new String[] {f.getName(), f.getAbsolutePath()});
+        }
+
+        return leds;
+    }
+
+    /**그밖에것들**/
     //파일 유무, 없으면 생성
     public void isExists(File file, int i) throws Exception {
         if (!file.exists()) {
@@ -206,6 +205,31 @@ public class FileIO extends ContextWrapper {
             } else if (i == FileKey.KEY_DIRECTORY_INT) {
                 file.mkdirs();
             }
+        }
+    }
+
+    //저장소 경로 리턴
+    public String getDefaultPath() {
+        return defaultPath;
+    }
+
+    //파일내용 가져옴
+    public ArrayList<String> getTextFile(File file) throws Exception {
+        if (file.exists()) {
+            ArrayList<String> arrayFile = new ArrayList<String>();
+            BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
+            String line;
+
+            while ((line = bufferedReader.readLine()) != null) {
+                if (!line.isEmpty()) {
+                    arrayFile.add(line);
+                }
+            }
+            bufferedReader.close();
+
+            return arrayFile;
+        } else {
+            return null;
         }
     }
 

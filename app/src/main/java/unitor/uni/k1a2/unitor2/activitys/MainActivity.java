@@ -6,12 +6,14 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import com.getbase.floatingactionbutton.FloatingActionButton;
@@ -28,8 +30,9 @@ import unitor.uni.k1a2.unitor2.R;
 import unitor.uni.k1a2.unitor2.activitys.SharedPreference.SettingActivity;
 import unitor.uni.k1a2.unitor2.views.Dialogs.DialogKey;
 import unitor.uni.k1a2.unitor2.views.Dialogs.MultiDialog;
-import unitor.uni.k1a2.unitor2.views.adapters.list.UnipackListAdapter;
-import unitor.uni.k1a2.unitor2.views.adapters.list.UnipackListItem;
+import unitor.uni.k1a2.unitor2.views.adapters.recyclerview.UnipackListAdapter;
+import unitor.uni.k1a2.unitor2.views.adapters.recyclerview.UnipackListItem;
+import unitor.uni.k1a2.unitor2.views.listener.RecyclerItemClickListener;
 
 /**
  * Created by jckim on 2017-11-29.
@@ -37,7 +40,7 @@ import unitor.uni.k1a2.unitor2.views.adapters.list.UnipackListItem;
 
 public class MainActivity extends AppCompatActivity implements MultiDialog.OnUnipackSelectListener {
 
-    private ListView list_unipack = null;
+    private RecyclerView list_unipack = null;
     private FloatingActionButton fab_new = null;
     private FloatingActionButton fab_import = null;
     private FloatingActionButton fab_setting = null;
@@ -54,7 +57,7 @@ public class MainActivity extends AppCompatActivity implements MultiDialog.OnUni
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_main);
 
-        list_unipack = (ListView)findViewById(R.id.List_Unipack);//유니팩 리스트
+        list_unipack = (RecyclerView) findViewById(R.id.List_Unipack);//유니팩 리스트
         fab_new = (FloatingActionButton)findViewById(R.id.fab_new);//새로운 유니팩
         fab_import = (FloatingActionButton)findViewById(R.id.fab_import);//유니팩 불러오기
         fab_setting = (FloatingActionButton)findViewById(R.id.fab_setting);//설정
@@ -63,27 +66,28 @@ public class MainActivity extends AppCompatActivity implements MultiDialog.OnUni
 
         getSupportActionBar().hide();
 
-        unipackListAdapter = new UnipackListAdapter();
+        list_unipack.setLayoutManager(new LinearLayoutManager(this));
+        list_unipack.setItemAnimator(new DefaultItemAnimator());
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(this, new LinearLayoutManager(this).getOrientation());
+        list_unipack.addItemDecoration(dividerItemDecoration);
+
+        unipackListAdapter = new UnipackListAdapter(R.layout.view_list_unipack);
         showUnipacks();
 
-        //유니팩 리스트 클릭시
-        list_unipack.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        list_unipack.addOnItemTouchListener(new RecyclerItemClickListener(this, list_unipack, new RecyclerItemClickListener.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                unipackListItem = (UnipackListItem)unipackListAdapter.getItem(i);
+            public void onItemClicked(View view, int position) {
+                unipackListItem = (UnipackListItem)unipackListAdapter.getItem(position);
                 final String string_title = unipackListItem.getTitle();
                 final String string_producer = unipackListItem.getProducer();
                 final String string_chain = unipackListItem.getChain();
                 final String string_Path = unipackListItem.getPath();
                 startEdit(string_title, string_producer, string_chain, string_Path);
             }
-        });
 
-        //유니팩 리스트 롱클릭시(삭제)
-        list_unipack.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
-            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
-                unipackListItem = (UnipackListItem)unipackListAdapter.getItem(i);
+            public void onLongItemClicked(View view, final int position) {
+                unipackListItem = (UnipackListItem)unipackListAdapter.getItem(position);
                 AlertDialog.Builder delete = new AlertDialog.Builder(MainActivity.this);
                 delete.setTitle(String.format(getString(R.string.alert_title_dunipack), unipackListItem.getTitle()));
                 delete.setMessage(String.format(getString(R.string.alert_message_dunipack), unipackListItem.getTitle()));
@@ -92,13 +96,46 @@ public class MainActivity extends AppCompatActivity implements MultiDialog.OnUni
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         DeleteFile deleteFile = new DeleteFile(MainActivity.this);
-                        deleteFile.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, FileKey.KEY_DELETE_UNIPACK, unipackListItem.getPath(), String.format(getString(R.string.asynk_delete_title), unipackListItem.getTitle()), list_unipack, unipackListAdapter);
+                        deleteFile.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, FileKey.KEY_DELETE_UNIPACK, unipackListItem.getPath(), String.format(getString(R.string.asynk_delete_title), unipackListItem.getTitle()), list_unipack, unipackListAdapter, position);
                     }
                 });
                 delete.show();
-                return true;
             }
-        });
+        }));
+
+//        //유니팩 리스트 클릭시
+//        list_unipack.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+//                unipackListItem = (UnipackListItem)unipackListAdapter.getItem(i);
+//                final String string_title = unipackListItem.getTitle();
+//                final String string_producer = unipackListItem.getProducer();
+//                final String string_chain = unipackListItem.getChain();
+//                final String string_Path = unipackListItem.getPath();
+//                startEdit(string_title, string_producer, string_chain, string_Path);
+//            }
+//        });
+//
+//        //유니팩 리스트 롱클릭시(삭제)
+//        list_unipack.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+//            @Override
+//            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+//                unipackListItem = (UnipackListItem)unipackListAdapter.getItem(i);
+//                AlertDialog.Builder delete = new AlertDialog.Builder(MainActivity.this);
+//                delete.setTitle(String.format(getString(R.string.alert_title_dunipack), unipackListItem.getTitle()));
+//                delete.setMessage(String.format(getString(R.string.alert_message_dunipack), unipackListItem.getTitle()));
+//                delete.setNegativeButton(getString(R.string.alert_button_dcancel), null);
+//                delete.setPositiveButton(getString(R.string.alert_button_dok), new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialogInterface, int i) {
+//                        DeleteFile deleteFile = new DeleteFile(MainActivity.this);
+//                        deleteFile.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, FileKey.KEY_DELETE_UNIPACK, unipackListItem.getPath(), String.format(getString(R.string.asynk_delete_title), unipackListItem.getTitle()), list_unipack, unipackListAdapter);
+//                    }
+//                });
+//                delete.show();
+//                return true;
+//            }
+//        });
 
         View.OnClickListener OnFloatingButtonClick = new View.OnClickListener() {
             @Override
@@ -119,7 +156,7 @@ public class MainActivity extends AppCompatActivity implements MultiDialog.OnUni
                                 final String string_title = edit_title.getText().toString();
                                 final String string_producer = edit_producer.getText().toString();
                                 final String string_chain = edit_chain.getText().toString();
-                                final String string_path = fileIO.getDefaultPath() + string_title + "/";
+                                final String string_path = fileIO.getDefaultPath() + "unipackProject/" + string_title + "/";
 
                                 if ((string_title.length() == 0||string_title.equals(""))||(string_producer.length() == 0||string_producer.equals(""))||(string_chain.length() == 0||string_chain.equals(""))) {
                                     Toast.makeText(MainActivity.this, getString(R.string.toast_newUnipack_null), Toast.LENGTH_LONG).show();
@@ -206,11 +243,18 @@ public class MainActivity extends AppCompatActivity implements MultiDialog.OnUni
     }
 
     private void showUnipacks() {
-        unipackListAdapter.clear();
+        unipackListAdapter.clearItem();
         ArrayList<String[]> arrayUnipack = fileIO.getUnipacks();
         if (arrayUnipack != null) {
             for (String[] unipackInfo:arrayUnipack) {
-                if (unipackInfo != null) unipackListAdapter.addItem(unipackInfo[0], unipackInfo[1], unipackInfo[3], unipackInfo[2]);
+                if (unipackInfo != null) {
+                    unipackListItem = new UnipackListItem();
+                    unipackListItem.setTitle(unipackInfo[0]);
+                    unipackListItem.setProducer(unipackInfo[1]);
+                    unipackListItem.setChain(unipackInfo[3]);
+                    unipackListItem.setPath(unipackInfo[2]);
+                    if (unipackInfo != null) unipackListAdapter.addItem(unipackListItem);
+                }
             }
         }
         list_unipack.setAdapter(unipackListAdapter);

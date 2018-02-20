@@ -3,25 +3,22 @@ package unitor.uni.k1a2.unitor2.File.AsyncTask;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
-import android.widget.ListView;
 
 import java.io.File;
-import java.util.ArrayList;
 
-import unitor.uni.k1a2.unitor2.File.FileIO;
 import unitor.uni.k1a2.unitor2.File.FileKey;
-import unitor.uni.k1a2.unitor2.views.adapters.list.UnipackListAdapter;
+import unitor.uni.k1a2.unitor2.views.adapters.recyclerview.UnipackListAdapter;
 
 /**
  * Created by jckim on 2017-12-03.
  */
 
-public class DeleteFile extends AsyncTask<Object, String, String> {
+public class DeleteFile extends AsyncTask<Object, String, Object[]> {
 
     private Context context;
     private ProgressDialog progressDialog;
     private UnipackListAdapter unipackListAdapter;
-    private ListView listView;
+    private int position;
 
     public DeleteFile(Context context) {
         this.context = context;
@@ -36,19 +33,19 @@ public class DeleteFile extends AsyncTask<Object, String, String> {
     }
 
     @Override
-    protected String doInBackground(Object... objects) {
+    protected Object[] doInBackground(Object... objects) {
         String key = (String) objects[0];
 
         if (key.equals(FileKey.KEY_DELETE_UNIPACK)) {
             String title = (String) objects[2];
             String path = (String) objects[1];
             unipackListAdapter = (UnipackListAdapter) objects[4];
-            listView = (ListView) objects[3];
+            position = (int) objects[5];
             publishProgress(key, title);
             delete(path);
         }
 
-        return key;
+        return new Object[] {key, position};
     }
 
     @Override
@@ -60,17 +57,10 @@ public class DeleteFile extends AsyncTask<Object, String, String> {
     }
 
     @Override
-    protected void onPostExecute(String s) {
+    protected void onPostExecute(Object[] objects) {
         progressDialog.dismiss();
-        if (s.equals(FileKey.KEY_DELETE_UNIPACK)) {
-            unipackListAdapter.clear();
-            ArrayList<String[]> arrayUnipack = new FileIO(context).getUnipacks();
-            if (arrayUnipack != null) {
-                for (String[] unipackInfo:arrayUnipack) {
-                    if (unipackInfo != null) unipackListAdapter.addItem(unipackInfo[0], unipackInfo[1], unipackInfo[3], unipackInfo[2]);
-                }
-            }
-            listView.setAdapter(unipackListAdapter);
+        if (((String) objects[0]).equals(FileKey.KEY_DELETE_UNIPACK)) {
+            unipackListAdapter.removeItem((int) objects[1]);
         }
     }
 

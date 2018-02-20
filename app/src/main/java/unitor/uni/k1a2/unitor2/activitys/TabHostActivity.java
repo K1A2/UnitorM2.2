@@ -382,7 +382,9 @@ public class TabHostActivity extends AppCompatActivity implements MultiDialog.On
             } else {
                 soundPool = new SoundPool(sound_list.length, AudioManager.STREAM_MUSIC, 0);
             }
-            new LoadSound().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, sound_list);
+            if (sound_list != null) {
+                new LoadSound().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, sound_list);
+            }
         } catch (Exception e) {
             e.printStackTrace();
             fileIO.showErr(e.getMessage());

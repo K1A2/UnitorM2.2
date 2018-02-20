@@ -26,6 +26,7 @@ public class CopyFile extends AsyncTask<Object, Object, Object[]> {
     private KeySoundFragment keySoundFragment;
     private ProgressDialog progressDialog;
     private String errMsg;
+    ArrayList<String[]> strings;
     private boolean cancelable = false;
 
     public CopyFile(Context context) {
@@ -57,6 +58,7 @@ public class CopyFile extends AsyncTask<Object, Object, Object[]> {
             path_target = path_target + "sounds/";
         }
 
+        strings = new ArrayList<String[]>();
         for (int i = 0;i < files.size();i++) {//name, path
             if (cancelable ==true) return new Object[] {key, objects[3], errMsg};
             String title = files.get(i)[0];
@@ -88,7 +90,7 @@ public class CopyFile extends AsyncTask<Object, Object, Object[]> {
             if (s[0] == FileKey.KEY_COPY_SOUND) {
                 keySoundFragment = (KeySoundFragment) s[1];
                 if (keySoundFragment != null) {
-                    keySoundFragment.addSound();
+                    keySoundFragment.addSound(strings);
                 }
                 progressDialog = new ProgressDialog(context);
                 progressDialog.setCanceledOnTouchOutside(true);
@@ -115,6 +117,7 @@ public class CopyFile extends AsyncTask<Object, Object, Object[]> {
                 }
                 newfos.close();
                 fis.close();
+                strings.add(new String[] {name, save_file + name});
             } catch (Exception e) {
                 e.printStackTrace();
                 cancelable = true;

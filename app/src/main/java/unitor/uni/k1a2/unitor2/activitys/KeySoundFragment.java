@@ -4,6 +4,10 @@ import android.app.Activity;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -15,7 +19,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.PopupMenu;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -34,9 +37,10 @@ import unitor.uni.k1a2.unitor2.File.SharedPreference.SharedPreferenceIO;
 import unitor.uni.k1a2.unitor2.R;
 import unitor.uni.k1a2.unitor2.views.Dialogs.DialogKey;
 import unitor.uni.k1a2.unitor2.views.Dialogs.MultiDialog;
-import unitor.uni.k1a2.unitor2.views.adapters.list.SourceFileListAdapter;
-import unitor.uni.k1a2.unitor2.views.adapters.list.SourceFileListItem;
+import unitor.uni.k1a2.unitor2.views.adapters.recyclerview.SourceFileListAdapter;
+import unitor.uni.k1a2.unitor2.views.adapters.recyclerview.SourceFileListItem;
 import unitor.uni.k1a2.unitor2.views.buttons.PlayButton;
+import unitor.uni.k1a2.unitor2.views.listener.RecyclerItemClickListener;
 
 /**
  * Created by jckim on 2017-12-09.
@@ -51,7 +55,7 @@ public class KeySoundFragment extends Fragment {
     private Button button_addSound;
     private TextView text_current;
     private TextView text_content;
-    private ListView list_sounds;
+    private RecyclerView list_sounds;
     private RadioButton radio_chain_1;
     private RadioGroup radioG_mode;
     private Spinner spinner_Chain;
@@ -75,7 +79,7 @@ public class KeySoundFragment extends Fragment {
 
         linear_buttons = (LinearLayout) root.findViewById(R.id.Layout_Btns);
         button_addSound = (Button) root.findViewById(R.id.Button_AddSound);
-        list_sounds = (ListView) root.findViewById(R.id.List_KeySound);
+        list_sounds = (RecyclerView) root.findViewById(R.id.List_KeySound);
         radioG_mode = (RadioGroup) root.findViewById(R.id.RadioG_mode);
         text_current = (TextView) root.findViewById(R.id.Text_current_sound);
         spinner_Chain = (Spinner) root.findViewById(R.id.Spinner_chain);
@@ -85,10 +89,16 @@ public class KeySoundFragment extends Fragment {
         linear_play = (LinearLayout) root.findViewById(R.id.Layout_Play);
         radioG_chain = (RadioGroup) root.findViewById(R.id.RadioG_chain_S);
 
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getContext(), new LinearLayoutManager(getContext()).getOrientation());
+        list_sounds.addItemDecoration(dividerItemDecoration);
+        list_sounds.setLayoutManager(new LinearLayoutManager(getContext()));
+        DefaultItemAnimator defaultItemAnimator = new DefaultItemAnimator();
+        list_sounds.setItemAnimator(defaultItemAnimator);
+
         text_content.setMovementMethod(new ScrollingMovementMethod());
+        sourceFileListAdapter = new SourceFileListAdapter(R.layout.view_list_files);
 
         fileIO = new FileIO(getContext());
-        sourceFileListAdapter = new SourceFileListAdapter();
         sharedPreferenceIO = new SharedPreferenceIO(getContext(), PreferenceKey.KEY_REPOSITORY_INFO);
 
         path = sharedPreferenceIO.getString(PreferenceKey.KEY_INFO_PATH, "");
@@ -134,7 +144,7 @@ public class KeySoundFragment extends Fragment {
         } else {
             try {
                 array_content = fileIO.getKeySound(path);
-                fileIO.mkKeySoundWork(array_content);
+                if (array_content != null) fileIO.mkKeySoundWork(array_content);
             } catch (Exception e) {
                 array_content = null;
                 fileIO.showErr(e.getMessage());
@@ -252,10 +262,10 @@ public class KeySoundFragment extends Fragment {
         });
 
         //리스트 아이템
-        list_sounds.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        list_sounds.addOnItemTouchListener(new RecyclerItemClickListener(getContext(), list_sounds, new RecyclerItemClickListener.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                sourceFileListItem = (SourceFileListItem) sourceFileListAdapter.getItem(i);
+            public void onItemClicked(View view, final int position) {
+                sourceFileListItem = (SourceFileListItem) sourceFileListAdapter.getItem(position);
 
                 PopupMenu popupMenu = new PopupMenu(getContext(), view);
                 popupMenu.getMenuInflater().inflate(R.menu.menu_sound, popupMenu.getMenu());
@@ -274,7 +284,8 @@ public class KeySoundFragment extends Fragment {
 
                             case R.id.menu_sound_delete:
                                 new File(sourceFileListItem.getPath()).delete();
-                                addSound();//리스트
+                                sourceFileListAdapter.removeItem(position);
+                                fileChange.onFileChange();//리스트
                                 break;
                         }
                         return true;
@@ -282,7 +293,12 @@ public class KeySoundFragment extends Fragment {
                 });
                 popupMenu.show();
             }
-        });
+
+            @Override
+            public void onLongItemClicked(View view, int position) {
+
+            }
+        }));
 
         return root;
     }
@@ -290,20 +306,31 @@ public class KeySoundFragment extends Fragment {
 
 
     //사운드추가
-    public void addSound() {
-        setSound();
-        fileChange.onFileChange();
+    public void addSound(ArrayList<String[]> source) {
+        for (String s[]:source) {
+            if (new File(s[1]).exists()) {
+                sourceFileListItem = new SourceFileListItem();
+                sourceFileListItem.setTitle(s[0]);
+                sourceFileListItem.setPath(s[1]);
+                sourceFileListAdapter.addItem(sourceFileListItem);
+            }
+        }
     }
 
     //
     private void setSound() {
-        sourceFileListAdapter.clear();
+
+        sourceFileListAdapter.clearItem();
         try {
             array_sounds = fileIO.getSoundFile(path + "sounds/");
             for (String[] s:array_sounds) {
-                sourceFileListAdapter.addItem(s[0], s[1]);
+                sourceFileListItem = new SourceFileListItem();
+                sourceFileListItem.setTitle(s[0]);
+                sourceFileListItem.setPath(s[1]);
+                sourceFileListAdapter.addItem(sourceFileListItem);
             }
             list_sounds.setAdapter(sourceFileListAdapter);
+            sourceFileListAdapter.notifyDataSetChanged();
         } catch (Exception e) {
             e.printStackTrace();
             array_sounds = null;
